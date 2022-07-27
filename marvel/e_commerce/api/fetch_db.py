@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
+
 '''
 Hacer un fetch de los comics de la API de marvel en nuestra database
 '''
+
 
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -24,14 +26,15 @@ def fetch_db(request):
     params.update({'limit': 20, 'offset': 0})
     comics = requests.get(URL_BASE + ENDPOINT, params = params)
     
-    if comics.status_code > 300:
+    if comics.status_code > 300 or not comics.json().get('data').get('results'):
+        # Devolver internal server error - status code 500
         print("Error al obtener los comics: " + str(comics.status_code))
         return Response({"error": "Error al obtener los comics"}, status=500)
 
     # Guardar comics en la base de datos - Se usa el offset como parámetro para saber cuando dejar de cargar comics
     comics_cargados = 0
 
-    while comics_cargados < 300:
+    while True:
         for comic in comics.json().get('data').get('results'):
 
             # Obtener valores del comic
@@ -55,6 +58,10 @@ def fetch_db(request):
                 continue
                 
             comics_cargados += 1
+
+            if comics_cargados >= 300:
+                return Response({"success": "Se guardaron los comics en la base de datos"}, status=200)
+                
         
         # Actualizar offset
         params.update({'offset': params.get('offset') + 20})
@@ -62,8 +69,7 @@ def fetch_db(request):
         # Obtener más comics desde API
         comics = requests.get(URL_BASE + ENDPOINT, params = PARAMS)
 
-        # Si recibimos una lista vacía, terminamos
+        # Si recibimos una lista vacía, terminamos - no hay más comics que obtener
         if not comics.json().get('data').get('results'):
-            break
-
-    return Response({"success": "Se guardaron los comics en la base de datos"}, status=200)
+            return Response({"success": "Se guardaron los comics en la base de datos"}, status=200)
+    
