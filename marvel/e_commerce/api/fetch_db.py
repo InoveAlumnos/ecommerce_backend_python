@@ -28,8 +28,10 @@ def fetch_db(request):
         print("Error al obtener los comics: " + str(comics.status_code))
         return Response({"error": "Error al obtener los comics"}, status=500)
 
-    # Guardar comics en la base de datos
-    while True:
+    # Guardar comics en la base de datos - Se usa el offset como parámetro para saber cuando dejar de cargar comics
+    comics_cargados = 0
+
+    while comics_cargados < 300:
         for comic in comics.json().get('data').get('results'):
 
             # Obtener valores del comic
@@ -49,19 +51,17 @@ def fetch_db(request):
                 Comic.objects.create(marvel_id = comic_id, title = comic_title, description = comic_description, price = comic_price, stock_qty = 100, picture = comic_thumbnail)
 
             except Exception as e:
-                print(f"Error al guardar comic en base de datos: {e}")
+                print(f"Se omitió comic duplicado: {comic_title} - {comic_id}")
                 continue
+                
+            comics_cargados += 1
         
         # Actualizar offset
         params.update({'offset': params.get('offset') + 20})
         
-        # Obtener comics desde API
+        # Obtener más comics desde API
         comics = requests.get(URL_BASE + ENDPOINT, params = PARAMS)
 
-        # Si el status code es mayor a 300, terminamos
-        if comics.status_code > 300:
-            break
-            
         # Si recibimos una lista vacía, terminamos
         if not comics.json().get('data').get('results'):
             break
