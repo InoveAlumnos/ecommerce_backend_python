@@ -22,13 +22,13 @@ services:
       # Enlazamos el puerto en el que trabaja Postgres, por defecto el 5432
       - 5432:5432
 
-  modulo_10:
+  marvel:
     # build es el lugar desde donde toma los archivos para generar la imagen.
     build: .
     # Imágen a utilizar:
-    image: modulo_10
+    image: marvel_back_end
     # Nombre del container:
-    container_name: modulo_10
+    container_name: marvel_back_end
     # Comportamiento ante fallos y al iniciar el sistema:
     restart: always
     # Carpetas enlazadas:
@@ -43,6 +43,7 @@ services:
     # Control de consola:
     stdin_open: true
     tty: true
-    command: gunicorn --chdir /opt/back_end/marvel marvel.wsgi:application --bind 0.0.0.0:8000
+    command: python marvel/manage.py runserver 0.0.0.0:8000
+    # command: gunicorn --chdir /opt/back_end/marvel marvel.wsgi:application --bind 0.0.0.0:8000
     depends_on:
       - db

@@ -137,3 +137,9 @@ dmypy.json
 
 # Image excludes
 images/
+
+# Log files
+logs/
+
+# Django data
+migrations/

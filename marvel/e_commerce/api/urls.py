@@ -3,6 +3,7 @@ from e_commerce.api.marvel_api_views import *
 
 # Importamos las API_VIEWS:
 from e_commerce.api.api_views import *
+from e_commerce.api.fetch_db import fetch_db
 
 urlpatterns = [
     # User APIs:
@@ -10,6 +11,7 @@ urlpatterns = [
 
     # APIs de Marvel
     path('get-comics/',get_comics, name='get-comics'),
+    path('fetch-database/',fetch_db, name='fetch-database'),
     path('purchased-item/',purchased_item, name='purchased-item'),
     
     # Comic API View:

@@ -15,25 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.shortcuts import redirect
+
 # NOTE: importamos Templateview para darle una view a Swagger 
 from django.views.generic import TemplateView
 from rest_framework.schemas import get_schema_view
 
 
-
 description = '''
-<a href="/">BACK TO INDEX</a>
-<br>
-<img src="https://lh3.googleusercontent.com/pw/AM-JKLWLct73ne_PgqQ146YMYjUgbswqg703xPZPnVImkFYwGbao5YksFGJFOlcoCJLfqIJ9_LRwFAwP9qinoEvsLx92NTOfAn54SgMLTgMvtii0r_rjneGjR53bx08OCncv4mRH4gNnpmEUuKofj59L9dAv=w1257-h103-no?authuser=0">
-<br>
-<br>
-<h2>Documentación general de APIs de la aplicación e-commerce</h2>
-<p>Para la autenticación por medio de TOKENS debemos agregar en el header:
-</br>
-<ul><li>'Authorization': 'Token 92937874f377a1ea17f7637ee07208622e5cb5e6'</li></ul>
-</br>
-Donde 92937874f377a1ea17f7637ee07208622e5cb5e6 es un ejemplo del Token Key. 
-</p>
+
 '''
 
 
@@ -45,14 +35,18 @@ urlpatterns = [
     path('',include('e_commerce.urls')),
     path('e-commerce/',include('e_commerce.api.urls')),
     path('e-commerce/',include('e_commerce.urls')),
+    
     # swagger app urls:
     path('api-docs/', TemplateView.as_view(
         template_name='api-docs/swagger-ui.html',
         extra_context={'schema_url':'openapi-schema'}
     ), name='swagger-ui'),
-     path('openapi', get_schema_view(
-        title="Inove Marvel e-commerce",
+
+    path('openapi', get_schema_view(
+        title="Inove - Marvel Back End",
         description=description,
         version="1.0.0"
     ), name='openapi-schema'),
+
+    path('', lambda request: redirect('api-docs/', permanent=True)),
 ]

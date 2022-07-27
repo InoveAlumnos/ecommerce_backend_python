@@ -159,6 +159,7 @@ class LoginUserAPIView(APIView):
                 return Response(user_data)
 
         except Exception as error:
+            print(error)
             # Si aparece alguna excepción, devolvemos un mensaje de error
             user_data['response'] = 'Error'
             user_data['error_message'] = error
