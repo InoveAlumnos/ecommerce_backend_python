@@ -34,6 +34,7 @@ urlpatterns = [
     # e-commerce app urls:
     path('',include('e_commerce.urls')),
     path('e-commerce/',include('e_commerce.api.urls')),
+    path('e-commerce/',include('e_commerce.auth.urls')),
     path('e-commerce/',include('e_commerce.urls')),
     
     # swagger app urls:

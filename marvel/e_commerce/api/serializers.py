@@ -10,12 +10,6 @@ class ComicSerializer(serializers.ModelSerializer):
         fields = ('marvel_id','title', 'description', 'price', 'stock_qty', 'picture')
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields= ("__all__")
-
-
 class WishListSerializer(serializers.ModelSerializer):
     user_id = serializers.PrimaryKeyRelatedField(write_only=True,
                                                    queryset=User.objects.all())

@@ -165,6 +165,7 @@ class LoginUserAPIView(APIView):
             user_data['error_message'] = error
             return Response(user_data)
 
+
 # TODO: Agregar las vistas genericas que permitan realizar un CRUD del modelo de wish-list.
 # TODO: Crear una vista generica modificada para traer todos los comics que tiene un usuario.
 
