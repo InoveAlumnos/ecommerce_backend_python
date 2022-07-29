@@ -5,13 +5,23 @@ Hacer un fetch de los comics de la API de marvel en nuestra database - Endpoint 
 '''
 
 import requests
+import hashlib
 from typing import List
-from e_commerce.models import Comic
-from e_commerce.api.marvel_api_views import *
+from applications.ecommerce.models import Comic
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
+
+# TODO: Mover estas keys a variables de entorno
+PUBLIC_KEY = '58ee40376f7c10e99f440f5e3abd2caa'
+PRIVATE_KEY = '2c0373e00d85edb4560f68ddc2094014e8694f90'
+TS = 1
+TO_HASH = str(TS)+PRIVATE_KEY+PUBLIC_KEY
+HASHED = hashlib.md5(TO_HASH.encode())
+URL_BASE = 'http://gateway.marvel.com/v1/public/'
+ENDPOINT = 'comics'
+PARAMS = dict(ts=TS, apikey=PUBLIC_KEY, hash=HASHED.hexdigest())
 
 
 class Fin(Exception): 

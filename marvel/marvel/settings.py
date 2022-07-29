@@ -11,12 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-# NOTE: Importamos os para indicar el directorio de templates y otras utilidades:
-import os
-# Importamos Celery para el manejo de tareas asincrónicas:
+import os 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 def get_env(var):
     '''
@@ -28,35 +24,45 @@ def get_env(var):
     except:
         return ''
 
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-$dpguq$#6!6dw($(qd6))7qcw%%#a=sc!-!7t!_av9%5*(q=uf'
-SECRET_KEY = get_env('SECRET_KEY')
+SECRET_KEY = 'django-insecure-q6!*-w(7gh2+a#qu=#4vl6_p4(e%=pm03f!8+re_!wbo-wu9w8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if get_env('DEBUG') == 'True' else False
+DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost', 'inove-marvel.herokuapp.com']
 
 # Application definition
 
-INSTALLED_APPS = [
+DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Local apps: Acá ponemos el nombre de las carpetas de nuestras aplicaciones
-    'e_commerce',
-    # Third party apps: acá vamos agregando las aplicaciones de terceros, extensiones de Django.
+]
+
+LOCAL_APPS = [
+    'applications.ecommerce'
+]
+
+THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'whitenoise.runserver_nostatic',
+    'whitenoise.runserver_nostatic'
 ]
+
+INSTALLED_APPS = DEFAULT_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -79,9 +85,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    # Corsheaders added:
     'corsheaders.middleware.CorsMiddleware',
 ]
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'marvel.urls'
@@ -89,7 +95,6 @@ ROOT_URLCONF = 'marvel.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # NOTE: Agregamos el directorio para los templates, necesario para Swagger
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -105,19 +110,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'marvel.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-# PRODUCTION_DB = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'dc2fmok5lb9368',           # POSTGRES_DB
-#         'USER': 'epqdasaigmomct',           # POSTGRES_USER
-#         'PASSWORD': '9fae66f3e7b9daad5dd4e3c4733bf8c94b1a20ba0ad002286f08b3b04a62ffba', # POSTGRES_PASSWORD
-#         'HOST': 'ec2-52-3-130-181.compute-1.amazonaws.com',                           # Nombre del servicio
-#         'PORT': '5432'                      # Número del puerto
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -129,6 +124,7 @@ DATABASES = {
         'PORT': '5432'                              # Número del puerto
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -162,11 +158,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-# NOTE: STATIC_ROOT y STATICFILES_DIRS No pueden contener el mismo directorio entre sus variables.
+# NOTE: STATIC_ROOT y STATICFILES_DIRS no pueden contener el mismo directorio entre sus variables.
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (str(BASE_DIR.joinpath('staticfiles')),)
@@ -176,10 +171,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# NOTE: Para debug
-# Color en los prints:
-# Modo de uso: print(VERDE+"mi texto")
 
 AMARILLO = "\033[;33m"
 CIAN = "\033[;36m"

@@ -37,7 +37,7 @@ class LoginUserAPIView(APIView):
         try:
             username = request.data.get('username')
             password = request.data.get('password')
-            account = authenticate(username=username, password=password)
+            account = authenticate(username = username, password = password)
 
             # Si el usuario existe y sus credenciales son validas, intentamos obtener el token
             if account:
@@ -52,11 +52,11 @@ class LoginUserAPIView(APIView):
                 return Response(status = 200, data = {"username": username, "token": token.key})
 
             else:
+                print(request.data)
                 # Si las credenciales son invalidas, devolvemos mensaje de error:
                 return Response(status = 401, data = {"response": "Error", "error_message": "Unauthorized - Credenciales invalidas"})
 
         except Exception as exception:
             print(exception)
-
             # Si aparece alguna excepción, devolvemos un mensaje de error
             return Response(status = 500, data = {"response": "Error", "error_message": "Internal server error"})

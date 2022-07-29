@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from applications.ecommerce.groups import ClientGroup
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -19,7 +20,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ("username", "first_name", "last_name", "email", "password")
 
     def create(self, validated_data):
-        return User.objects.create(**validated_data)
+        return User.objects.create_user(**validated_data)
 
         
 class SignUpUserAPIView(APIView):
@@ -62,4 +63,17 @@ class SignUpUserAPIView(APIView):
             return Response(status = 200, data = serializer.data)
         
         print(request.data)
+        return Response(status = 400, data = {"Error": "Bad Request", "error_message": f"{serializer.errors}"})
+
+
+class SignUpClientAPIView(SignUpUserAPIView):
+    
+    def post(self, request, format = None):
+        serializer = super().serializer_class(data = request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            ClientGroup().agregar_usuario(User.objects.get(username = serializer.data['username']))
+            return Response(status = 200, data = serializer.data)
+        
         return Response(status = 400, data = {"Error": "Bad Request", "error_message": f"{serializer.errors}"})
