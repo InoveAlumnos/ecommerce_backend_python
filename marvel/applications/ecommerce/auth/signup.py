@@ -2,29 +2,48 @@
 
 from applications.ecommerce.models import Profile
 from applications.ecommerce.groups import ClientGroup
+from applications.ecommerce.permissions import IsClient
+from applications.ecommerce.auth.serializers import RegisterSerializer
 from rest_framework.views import APIView
-from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
-from rest_framework import serializers
-from django.contrib.auth.models import User
-
-
-class RegisterSerializer(serializers.ModelSerializer):
-
-    password = serializers.CharField(
-        max_length = 128, min_length = 6, write_only = True
-    )
-
-    class Meta:
-        model = User
-        fields = ("first_name", "last_name", "username", "email", "password")
-
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+from rest_framework.authentication import TokenAuthentication
+from django.db.utils import IntegrityError
 
         
-class SignUpUserAPIView(APIView):
+class SignUpClientAPIView(APIView):
+
+    serializer_class = RegisterSerializer
+    parser_classes = [JSONParser]
+    authentication_classes = []
+    permission_classes = []
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            serializer = self.serializer_class(data = request.data)
+
+            if serializer.is_valid():
+                
+                try:
+                    user = serializer.save()
+
+                except IntegrityError:
+                    return Response(status = 400, data = {"error": f"El nombre de usuario {request.data['username']} no está disponible"})
+
+                except:                    
+                    return Response(status = 500, data = {"error": "Internal server error", "description": e})
+                
+                ClientGroup().agregar_usuario(user)
+                return Response(status = 200, data = serializer.data)
+            
+            return Response(status = 400, data = {"error": "Bad Request", "error_message": f"{serializer.errors}"})
+
+        except Exception as e:
+            print(e)
+            return Response(status = 500, data = {"error": "Internal server error", "description": e})
+
+
+class SignUpUserAPIView(SignUpClientAPIView):
     '''
     @NAME: SignUpUserAPIView \n
 
@@ -51,35 +70,32 @@ class SignUpUserAPIView(APIView):
         - email: str \n
     '''
 
-    serializer_class = RegisterSerializer
-    authentication_classes = []
-    permission_classes = []
-    parser_classes = [JSONParser]
+    permission_classes = [IsClient]
+    authentication_classes = [TokenAuthentication]
 
-    def post(self, request, format = None):
-        serializer = self.serializer_class(data = request.data)
+    def post(self, request, *args, **kwargs):
+        try:
+            serializer = super().serializer_class(data = request.data)
 
-        if serializer.is_valid():
-            user = serializer.save()
+            if serializer.is_valid():
+                try:
+                    user = serializer.save()
+
+                except IntegrityError:
+                    return Response(status = 400, data = {"error": f"El nombre de usuario {request.data['username']} no está disponible"})
+
+                except:                    
+                    return Response(status = 500, data = {"error": "Internal server error", "description": e})
+                
+                # NOTE: Creo perfil usando un filtrado del request, en caso de que luego se agreguen mas campos, va a ser mas facil
+                profile = Profile(user = user, **{key: dict(request.data).get(key, "Desconocido")
+                                for key in dict(request.data) if key in ['phone', "address", "province_state", "country", "postal_code"]})
+                profile.save()
+
+                return Response(status = 200, data = serializer.data)
             
-            # NOTE: Creo perfil usando un filtrado del request, en caso de que luego se agreguen mas campos, va a ser mas facil
-            profile = Profile(user = user, **{key: dict(request.data).get(key, "Desconocido")
-                            for key in dict(request.data) if key in ['phone']})
-            profile.save()
+            return Response(status = 400, data = {"Error": "Bad Request", "error_message": "No se enviaron los valores necesarios"})
 
-            return Response(status = 200, data = serializer.data)
-        
-        return Response(status = 400, data = {"Error": "Bad Request", "error_message": f"{serializer.errors}"})
-
-
-class SignUpClientAPIView(SignUpUserAPIView):
-    
-    def post(self, request, format = None):
-        serializer = super().serializer_class(data = request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            ClientGroup().agregar_usuario(User.objects.get(username = serializer.data['username']))
-            return Response(status = 200, data = serializer.data)
-        
-        return Response(status = 400, data = {"Error": "Bad Request", "error_message": f"{serializer.errors}"})
+        except Exception as e:
+            print(e)
+            return Response(status = 500, data = {"Error": "Bad Request", "error_message": "Ocurrío un error en el servidor", "description": e})

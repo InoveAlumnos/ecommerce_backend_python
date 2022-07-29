@@ -137,3 +137,6 @@ dmypy.json
 
 # Image excludes
 images/
+
+# Logs
+logs/*

@@ -23,6 +23,8 @@ class Comic(models.Model):
 
     picture = models.URLField(verbose_name = 'pictures', default = '')
 
+    stars = models.PositiveIntegerField(verbose_name = 'stars', default = 0) 
+
     class Meta:
         db_table = 'E Commerce Comic'
 
@@ -62,7 +64,15 @@ class Profile(models.Model):
     user = models.ForeignKey(
         User, verbose_name = 'User', on_delete = models.DO_NOTHING, default = 1, blank = True)
 
-    phone = models.CharField(verbose_name = 'phone', max_length = 120, default = '')
+    phone = models.CharField(verbose_name = 'phone', max_length = 120, default = '', blank = True)
+
+    address = models.CharField(verbose_name = 'address', max_length = 120, default = '', blank = True)
+
+    province_state = models.CharField(verbose_name = "province_state", max_length = 120, default = '', blank = True)
+
+    country = models.CharField(verbose_name = "country", max_length = 120, default = '', blank = True)
+
+    postal_code = models.CharField(verbose_name = "postal_code", max_length = 120, default = '', blank = True)
 
     class Meta:
         db_table = 'E Commerce UserData'

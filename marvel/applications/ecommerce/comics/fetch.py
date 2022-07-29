@@ -6,6 +6,7 @@ Hacer un fetch de los comics de la API de marvel en nuestra database - Endpoint 
 
 import requests
 import hashlib
+import random
 from typing import List
 from applications.ecommerce.models import Comic
 from rest_framework.views import APIView
@@ -112,7 +113,6 @@ class FetchDatabaseAPIView(APIView):
             return Response({"response": "Comics actualizados"}, status=200)
 
         except Exception as e:
-            print(e)
             return Response(status = 500, data = {"error": "Internal server error"})
 
 
@@ -136,7 +136,8 @@ class FetchDatabaseAPIView(APIView):
             description = comic_description,
             price = comic_price,
             stock_qty = 100,
-            picture = comic_thumbnail
+            picture = comic_thumbnail,
+            stars = random.randint(1, 5)
         )
 
 

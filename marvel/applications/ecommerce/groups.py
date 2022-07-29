@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
 from django.contrib.auth.models import Group
-from django.core.management import execute_from_command_line
-
 
 class ClientGroupMeta(type):
     _instancias = {}
@@ -19,11 +17,7 @@ class ClientGroup(metaclass = ClientGroupMeta):
     """
     Clase Singleton - De única instancia
     """
-    try:
-        group, _ = Group.objects.get_or_create(name = "Client") 
-    except:
-        execute_from_command_line("python marvel/manage.py makemigrations ecommerce")
-        execute_from_command_line("python marvel/manage.py migrate ecommerce")
+    group, _ = Group.objects.get_or_create(name = "Client") 
         
     def agregar_usuario(self, usuario):
         self.group.user_set.add(usuario)

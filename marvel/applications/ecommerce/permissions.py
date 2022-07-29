@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
-
 '''
 Permisos custom!
 '''
 
-
 from rest_framework.permissions import BasePermission
-
 
 class IsClient(BasePermission):
     """

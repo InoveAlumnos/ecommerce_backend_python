@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
+from applications.ecommerce.auth.serializers import LoginSerializer
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+
 
 class LoginUserAPIView(APIView):
     '''
@@ -28,35 +30,41 @@ class LoginUserAPIView(APIView):
         - token: str
     '''
 
+    serializer_class = LoginSerializer
     parser_classes = [JSONParser]
     authentication_classes = []
     permission_classes = []
 
-    def post(self, request, format = None):
-
+    def post(self, request, *args, **kwargs):
+        
         try:
-            username = request.data.get('username')
-            password = request.data.get('password')
-            account = authenticate(username = username, password = password)
+            serializer = self.serializer_class(data = request.data)
 
-            # Si el usuario existe y sus credenciales son validas, intentamos obtener el token
-            if account:
-                try:
-                    token = Token.objects.get(user=account)
+            if serializer.is_valid():
 
-                except Token.DoesNotExist:
-                    # En caso de token inexistente, lo creamos automáticamente
-                    token = Token.objects.create(user=account)
+                username = request.data.get('username')
+                password = request.data.get('password')
+                account = authenticate(username = username, password = password)
 
-                # Devolvemos la respuesta personalizada
-                return Response(status = 200, data = {"username": username, "token": token.key})
+                # Si el usuario existe y sus credenciales son validas, intentamos obtener el token
+                if account:
+                    try:
+                        token = Token.objects.get(user=account)
 
-            else:
-                print(request.data)
-                # Si las credenciales son invalidas, devolvemos mensaje de error:
-                return Response(status = 401, data = {"response": "Error", "error_message": "Unauthorized - Credenciales invalidas"})
+                    except Token.DoesNotExist:
+                        # En caso de token inexistente, lo creamos automáticamente
+                        token = Token.objects.create(user=account)
 
-        except Exception as exception:
-            print(exception)
-            # Si aparece alguna excepción, devolvemos un mensaje de error
-            return Response(status = 500, data = {"response": "Error", "error_message": "Internal server error"})
+                    # Devolvemos la respuesta personalizada
+                    return Response(status=200, data={"username": username, "token": token.key})
+
+                else:
+                    print(request.data)
+                    # Si las credenciales son invalidas, devolvemos mensaje de error:
+                    return Response(status=401, data={"response": "Error", "error_message": "Unauthorized - Credenciales invalidas"})
+
+            return Response(status = 400, data = {"Error": "Bad Request", "error_message": f"{serializer.errors}"})
+
+        except Exception as e:
+            print(e)
+            return Response(status = 500, data = {"Error": "Internal server error", "description": e})
