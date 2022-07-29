@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from applications.ecommerce.models import Profile
 from applications.ecommerce.groups import ClientGroup
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
@@ -59,10 +60,15 @@ class SignUpUserAPIView(APIView):
         serializer = self.serializer_class(data = request.data)
 
         if serializer.is_valid():
-            serializer.save()
+            user = serializer.save()
+            
+            # Create profile            
+            profile = Profile(user=user, **{key: serializer.data[key]
+                            for key in serializer.data if key not in ['username', 'password']})
+            profile.save()
+
             return Response(status = 200, data = serializer.data)
         
-        print(request.data)
         return Response(status = 400, data = {"Error": "Bad Request", "error_message": f"{serializer.errors}"})
 
 

@@ -32,3 +32,10 @@ class wish_listAdmin(admin.ModelAdmin):
     list_display = ('user', 'comic', 'favorite', 'cart')
     list_display_links = ('user', 'comic')
     list_filter= ('favorite','cart')
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "first_name", "last_name", "email", "phone")
+    list_display_links = ("user", "first_name", "last_name", "email", "phone")
+    list_filter = ("user", "first_name", "last_name", "email", "phone")
