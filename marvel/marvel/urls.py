@@ -35,7 +35,8 @@ Donde 92937874f377a1ea17f7637ee07208622e5cb5e6 es un ejemplo del Token Key.
 '''
 
 urlpatterns = [
-    path('/', lambda request: redirect('/ecommerce', permanent = True)),
+    path('', lambda request: redirect('/api-docs/', permanent = True)),
+    path('/', lambda request: redirect('/api-docs/', permanent = True)),
     path('admin/', admin.site.urls),
     path('ecommerce/', include('applications.ecommerce.urls')),
     path('ecommerce/', include('applications.ecommerce.auth.urls')),

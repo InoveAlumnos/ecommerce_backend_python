@@ -12,8 +12,8 @@ class ComicSerializer(serializers.ModelSerializer):
 
 
 class WishListSerializer(serializers.ModelSerializer):
-    user_id = serializers.PrimaryKeyRelatedField(write_only = True, queryset = User.objects.all())
-    comic_id = serializers.PrimaryKeyRelatedField(write_only = True, queryset = Comic.objects.all())
+    user = serializers.PrimaryKeyRelatedField(write_only = True, queryset = User.objects.all())
+    comic = serializers.PrimaryKeyRelatedField(write_only = True, queryset = Comic.objects.all())
 
     class Meta:
         model = WishList

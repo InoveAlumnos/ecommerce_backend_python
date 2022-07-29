@@ -22,7 +22,7 @@ from applications.ecommerce.auth.signup import SignUpClientAPIView, SignUpUserAP
 
 urlpatterns = [
     path('user/login/', LoginUserAPIView.as_view()),
-    path("client/login/", LoginUserAPIView.as_view()), # :shushing_face:
     path("user/signup/", SignUpUserAPIView.as_view()),
+    path("client/login/", LoginUserAPIView.as_view()), # :shushing_face:
     path("client/signup/", SignUpClientAPIView.as_view()),
 ]

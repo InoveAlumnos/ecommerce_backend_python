@@ -31,11 +31,11 @@ class Comic(models.Model):
 class WishList(models.Model):
     id = models.BigAutoField(db_column = 'ID', primary_key = True)
 
-    user_id = models.ForeignKey(
-        User, verbose_name = 'User ID', on_delete = models.DO_NOTHING, default = 1, blank = True)
+    user = models.ForeignKey(
+        User, verbose_name = 'User', on_delete = models.DO_NOTHING, default = 1, blank = True)
 
-    comic_id = models.ForeignKey(
-        Comic, verbose_name = 'Comic ID', on_delete = models.DO_NOTHING, default = 1, blank = True)
+    comic = models.ForeignKey(
+        Comic, verbose_name = 'Comic', on_delete = models.DO_NOTHING, default = 1, blank = True)
 
     favorite = models.BooleanField(verbose_name = 'Faved', default = None)
 
@@ -51,4 +51,4 @@ class WishList(models.Model):
         db_table = 'E Commerce Wishlist'
 
     def __str__(self):
-        return f'Wishlist: ID: {self.id} - User ID: {self.user_id} - Comic ID: {self.comic_id}'
+        return f'Wishlist: ID: {self.id} - User ID: {self.user} - Comic ID: {self.comic}'
