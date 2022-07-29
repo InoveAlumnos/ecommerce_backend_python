@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -60,16 +62,10 @@ class Profile(models.Model):
     user = models.ForeignKey(
         User, verbose_name = 'User', on_delete = models.DO_NOTHING, default = 1, blank = True)
 
-    first_name = models.CharField(verbose_name = 'first_name', max_length = 120, default = '')
-
-    last_name = models.CharField(verbose_name = 'last_name', max_length = 120, default = '')
-
-    email = models.EmailField(verbose_name = 'email', default = '')
-
     phone = models.CharField(verbose_name = 'phone', max_length = 120, default = '')
 
     class Meta:
         db_table = 'E Commerce UserData'
 
     def __str__(self):
-        return f'UserData: ID: {self.id} - User ID: {self.user} - First Name: {self.first_name} - Last Name: {self.last_name} - Email: {self.email} - Phone: {self.phone}'
+        return f'Profile: ID: {self.id} - User: {self.user} - Phone: {self.phone}'

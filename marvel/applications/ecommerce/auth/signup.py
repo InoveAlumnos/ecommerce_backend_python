@@ -62,9 +62,9 @@ class SignUpUserAPIView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             
-            # Create profile            
-            profile = Profile(user=user, **{key: serializer.data[key]
-                            for key in serializer.data if key not in ['username', 'password']})
+            # NOTE: Creo perfil usando un filtrado del request, en caso de que luego se agreguen mas campos, va a ser mas facil
+            profile = Profile(user = user, **{key: dict(request.data).get(key, "Desconocido")
+                            for key in dict(request.data) if key in ['phone']})
             profile.save()
 
             return Response(status = 200, data = serializer.data)

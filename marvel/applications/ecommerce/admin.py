@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 from django.contrib import admin
 from applications.ecommerce.models import *
 
@@ -36,6 +37,6 @@ class wish_listAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "first_name", "last_name", "email", "phone")
-    list_display_links = ("user", "first_name", "last_name", "email", "phone")
-    list_filter = ("user", "first_name", "last_name", "email", "phone")
+    list_display = ("user", "phone")
+    list_display_links = ("user", "phone")
+    list_filter = ("user", "phone")
