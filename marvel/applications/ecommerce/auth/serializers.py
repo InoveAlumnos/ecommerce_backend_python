@@ -2,6 +2,7 @@
 
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from applications.ecommerce.models import Profile
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -25,10 +26,6 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
-    class Meta:
-        model = User
-        fields = ("username", "password")
-
 
 class ChangePasswordSerializer(serializers.Serializer):
 
@@ -40,3 +37,11 @@ class ChangePasswordSerializer(serializers.Serializer):
         model = User
         fields = ("username", "old_password", "new_password")
         
+
+class ProfileDataSerializer(serializers.Serializer):
+
+    username = serializers.CharField()
+
+    class Meta:
+        model = Profile
+        fields = ("username",)

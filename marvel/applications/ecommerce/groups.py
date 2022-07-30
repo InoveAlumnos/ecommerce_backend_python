@@ -2,6 +2,7 @@
 
 from django.contrib.auth.models import Group
 
+
 class ClientGroupMeta(type):
     _instancias = {}
     
@@ -13,11 +14,30 @@ class ClientGroupMeta(type):
         return cls._instancias[cls]
 
 
-class ClientGroup(metaclass = ClientGroupMeta):
+class GenericGroup:
+    def agregar_usuario(self, usuario):
+        self.group.user_set.add(usuario)
+
+    def eliminar_usuario(self, usuario):
+        self.group.user_set.remove(usuario)
+
+
+class ClientGroup(GenericGroup, metaclass = ClientGroupMeta):
     """
     Clase Singleton - De única instancia
     """
-    group, _ = Group.objects.get_or_create(name = "Client") 
-        
-    def agregar_usuario(self, usuario):
-        self.group.user_set.add(usuario)
+    try:
+        group, _ = Group.objects.get_or_create(name = "client") 
+    except:
+        print("Es necesario realizar migraciones")
+        pass        
+
+class ConsumerGroup(GenericGroup, metaclass = ClientGroupMeta):
+    """
+    Clase Singleton - De única instancia
+    """
+    try:
+        group, _ = Group.objects.get_or_create(name = "consumer") 
+    except:
+        print("Es necesario realizar migraciones")
+        pass

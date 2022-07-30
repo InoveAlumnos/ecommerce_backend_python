@@ -4,11 +4,12 @@ from applications.ecommerce.models import Profile
 from applications.ecommerce.groups import ClientGroup
 from applications.ecommerce.permissions import IsClient
 from applications.ecommerce.auth.serializers import RegisterSerializer
+from django.db.utils import IntegrityError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated   
 from rest_framework.authentication import TokenAuthentication
-from django.db.utils import IntegrityError
 
         
 class SignUpClientAPIView(APIView):
@@ -30,7 +31,7 @@ class SignUpClientAPIView(APIView):
                 except IntegrityError:
                     return Response(status = 400, data = {"error": f"El nombre de usuario {request.data['username']} no está disponible"})
 
-                except:                    
+                except Exception as e:                    
                     return Response(status = 500, data = {"error": "Internal server error", "description": e})
                 
                 ClientGroup().agregar_usuario(user)
@@ -39,7 +40,6 @@ class SignUpClientAPIView(APIView):
             return Response(status = 400, data = {"error": "Bad Request", "error_message": f"{serializer.errors}"})
 
         except Exception as e:
-            print(e)
             return Response(status = 500, data = {"error": "Internal server error", "description": e})
 
 
@@ -55,6 +55,7 @@ class SignUpUserAPIView(SignUpClientAPIView):
 
     @HEADERS: \n
         - Content-Type: application/json \n
+        - ApiKey: <API_KEY> \n
 
     @PAYLOAD: \n 
         - username: str \n 
@@ -70,7 +71,7 @@ class SignUpUserAPIView(SignUpClientAPIView):
         - email: str \n
     '''
 
-    permission_classes = [IsClient]
+    permission_classes = [IsAuthenticated, IsClient]
     authentication_classes = [TokenAuthentication]
 
     def post(self, request, *args, **kwargs):
