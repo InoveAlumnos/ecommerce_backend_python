@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.generics import UpdateAPIView
+from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.permissions import IsAuthenticated   
 from rest_framework.authentication import TokenAuthentication
 
@@ -14,7 +15,8 @@ class ResetPasswordView(UpdateAPIView):
     '''
     @NAME: ResetPasswordView \n
 
-    @DESCRIPTION: Cambiar/Resetear contraseña de un usuario - **NO** aplica a usuarios que hayan olvidado su contraseña \n
+    @DESCRIPTION: Cambiar/Resetear contraseña de un usuario - **NO** aplica a usuarios que hayan olvidado su contraseña,
+                  está pensado para usuarios **logueados** que desean cambiar su contraseña \n
 
     @ROUTE: /user/reset-password/ \n
 
@@ -32,7 +34,7 @@ class ResetPasswordView(UpdateAPIView):
 
     serializer_class = ChangePasswordSerializer
     model = User
-    permission_classes = [IsAuthenticated, IsClient]
+    permission_classes = [HasAPIKey and IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
     def patch(self, request, *args, **kwargs):

@@ -6,29 +6,27 @@ from applications.ecommerce.auth.serializers import ProfileDataSerializer
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
+from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
+from rest_framework.permissions import IsAuthenticated
 
 
 class UpdateProfileAPIView(APIView):
 
     serializer_class = [ProfileDataSerializer]
     parser_classes = [JSONParser]
-    permission_classes = [IsClient]
+    permission_classes = [HasAPIKey and IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
     def patch(self, request, *args, **kwargs):
         try:
-            # TODO: Validar que el token y el usuario coinciden
-            # Validate that the token and the user coincide
-            if not dict(request.headers).get("User-Agent"):
-                return Response(status=401, data={"error": "UnAuthorized", "error_message": "No se ha enviado el header 'user-agent'"})
-
             consumer = User.objects.get(username = request.data.get("username"))
-            
-            if not Token.objects.get(key = request.headers.get("user-agent").split(" ")[1]).user == consumer:
+
+            # Validar que el username coincide con el token enviado            
+            if not Token.objects.get(key = request.headers.get("Authorization").split(" ")[1]).user == consumer:
                 return Response(status=401, data = {"error": "La sesión y el usuario no coinciden"})
 
         except Exception as e:

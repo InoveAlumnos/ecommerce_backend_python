@@ -6,6 +6,7 @@ APIs genéricas para realizar un CRUD a la base de datos - Tabla Comic y WishLis
 
 from applications.ecommerce.models import Comic,WishList
 from applications.ecommerce.comics.serializers import ComicSerializer, WishListSerializer
+from rest_framework_api_key.permissions import HasAPIKey
 from applications.ecommerce.permissions import IsClient
 from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
@@ -19,26 +20,15 @@ from rest_framework.generics import (
 )
 
 
-mensaje_headder = '''
-Ejemplo de header
-
-headers = {
-  'Authorization': 'Token 92937874f377a1ea17f7637ee07208622e5cb5e6',
-  'actions': 'GET',
-  'Content-Type': 'application/json',
-}
-'''
-
-
 class GetComicAPIView(ListAPIView):
-    __doc__ = f'''{mensaje_headder}
+    __doc__ = f'''
     `[METODO GET]`
     Esta vista de API nos devuelve una lista de todos los comics presentes 
     en la base de datos.
     '''
 
     serializer_class = ComicSerializer
-    permission_classes = [IsAuthenticated, IsClient]
+    permission_classes = [HasAPIKey and IsAuthenticated]
     authentication_classes = [TokenAuthentication]
     
     def get_queryset(self):
@@ -50,17 +40,17 @@ class GetComicAPIView(ListAPIView):
 
 
 class PostComicAPIView(CreateAPIView):
-    __doc__ = f'''{mensaje_headder}
+    __doc__ = f'''
     `[METODO POST]`
     Esta vista de API nos permite hacer un insert en la base de datos.
     '''
     queryset = Comic.objects.all()
     serializer_class = ComicSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAdminUser]
 
   
 class ListCreateComicAPIView(ListCreateAPIView):
-    __doc__ = f'''{mensaje_headder}
+    __doc__ = f'''
     `[METODO GET-POST]`
     Esta vista de API nos devuelve una lista de todos los comics presentes 
     en la base de datos.
@@ -68,49 +58,49 @@ class ListCreateComicAPIView(ListCreateAPIView):
     '''
     queryset = Comic.objects.all()
     serializer_class = ComicSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAdminUser]
 
 
 class RetrieveUpdateComicAPIView(RetrieveUpdateAPIView):
-    __doc__ = f'''{mensaje_headder}
+    __doc__ = f'''
     `[METODO GET-PUT-PATCH]`
     Esta vista de API nos permite actualizar un registro, o simplemente visualizarlo.
     '''
     queryset = Comic.objects.all()
     serializer_class = ComicSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAdminUser]
 
 
 class DestroyComicAPIView(DestroyAPIView):
-    __doc__ = f'''{mensaje_headder}
+    __doc__ = f'''
     `[METODO DELETE]`
     Esta vista de API nos devuelve una lista de todos los comics presentes 
     en la base de datos.
     '''
     queryset = Comic.objects.all()
     serializer_class = ComicSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAdminUser]
 
 
 
 class GetWishListAPIView(ListAPIView):
-    __doc__ = f'''{mensaje_headder}
+    __doc__ = f'''
     `[METODO GET]`
     Esta vista de API nos devuelve una lista de todas las wishlists presentes en la base de datos.
     '''
     queryset = WishList.objects.all()
     serializer_class = WishListSerializer
-    permission_classes = [IsAuthenticated, IsClient]
+    permission_classes = [IsClient]
 
 
 class GetWishListByUserAPIView(ListAPIView):
-    __doc__ = f'''{mensaje_headder}
+    __doc__ = f'''
     `[METODO GET]`
     Esta vista de API nos devuelve una lista de todas las wishlists presentes en la base de datos.
     '''
     queryset = WishList.objects.all()
     serializer_class = WishListSerializer
-    permission_classes = [IsAuthenticated, IsClient]
+    permission_classes = [IsClient]
 
     def get_queryset(self):
         uid = self.kwargs.get("uid")
@@ -120,7 +110,7 @@ class GetWishListByUserAPIView(ListAPIView):
 
 
 class PostWishListAPIView(CreateAPIView):
-    __doc__ = f'''{mensaje_headder}
+    __doc__ = f'''
     `[METODO POST]`
     Esta vista de API nos permite hacer un insert en la base de datos.
     '''

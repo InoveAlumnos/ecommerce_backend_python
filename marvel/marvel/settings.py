@@ -54,6 +54,7 @@ DEFAULT_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
+    "rest_framework_api_key",
     'corsheaders',
     'whitenoise.runserver_nostatic',
     'django_rest_passwordreset',
@@ -65,11 +66,13 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = DEFAULT_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
+# Setear que la apikey debe ser enviada en el header de la siguiente forma "X-Api-Key: <API_KEY>"
+API_KEY_CUSTOM_HEADER = 'HTTP_X_API_KEY'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
