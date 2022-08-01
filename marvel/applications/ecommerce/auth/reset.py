@@ -20,7 +20,7 @@ class ResetPasswordView(UpdateAPIView):
 
     @ROUTE: /user/reset-password/ \n
 
-    @METHODS: UPDATE \n
+    @METHODS: PATCH \n
 
     @HEADERS: \n
         - Content-Type: application/json \n

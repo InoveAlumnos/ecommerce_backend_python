@@ -33,6 +33,6 @@ urlpatterns = [
 
     # WishList API View
     path('wish/get', GetWishListAPIView.as_view()),
-    path("wish/get/<uid>", GetWishListByUserAPIView.as_view()),
-    path('wish/post', PostWishListAPIView.as_view()),
+    path("wish/get/<username>", GetWishListByUserAPIView.as_view()),
+    path('wish/post/', PostWishListAPIView.as_view()),
 ]

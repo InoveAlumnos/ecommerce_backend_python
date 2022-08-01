@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from yaml import serialize
 from applications.ecommerce.models import Comic, WishList
 from django.contrib.auth.models import User
 from rest_framework import serializers

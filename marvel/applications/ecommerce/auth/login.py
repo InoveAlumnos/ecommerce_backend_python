@@ -2,14 +2,12 @@
 
 from applications.ecommerce.auth.serializers import LoginSerializer
 from applications.ecommerce.groups import ClientGroup
-from applications.ecommerce.permissions import IsClient
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.authtoken.models import Token
-from rest_framework.authentication import TokenAuthentication
 from rest_framework_api_key.models import APIKey
 
 
@@ -54,9 +52,12 @@ class LoginClientAPIView(APIView):
                 # Si el usuario existe y sus credenciales son validas, intentamos obtener el token
                 if account:
                     # Devolvemos Api-Key para cliente
-                    if account.user.groups.filter(name = ClientGroup.group.name).exists():
-                        _, key = APIKey.objects.get_or_create(name="inove-apikey")
+                    if account.groups.filter(name = ClientGroup.group.name).exists():
+                        # Crear una apikey para el usuario. # TODO: Agregarle fecha de expiración 
+                        _, key = APIKey.objects.create_key(name = username)
+                        
                         return Response(status = 200, data = {'username': username, 'api-key': key})
+                    
                     else:
                         return Response(status = 401, data = {"error": "Unauthorized", "error_message": "Tu usuario no pertenece al grupo cliente"})
 
@@ -135,4 +136,3 @@ class LoginUserAPIView(APIView):
         except Exception as e:
             print(e)
             return Response(status = 500, data = {"error": "Internal server error", "description": e})
-            

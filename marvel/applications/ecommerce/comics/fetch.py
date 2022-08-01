@@ -43,7 +43,7 @@ class FetchDatabaseAPIView(APIView):
     Eliminar todos los comics y agregar otros 300 comics \n
     '''
 
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
 

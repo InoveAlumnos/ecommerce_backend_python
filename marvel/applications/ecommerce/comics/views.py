@@ -4,11 +4,14 @@
 APIs genéricas para realizar un CRUD a la base de datos - Tabla Comic y WishList
 '''
 
+from django.db.utils import IntegrityError
 from applications.ecommerce.models import Comic,WishList
-from applications.ecommerce.comics.serializers import ComicSerializer, WishListSerializer
-from rest_framework_api_key.permissions import HasAPIKey
+from applications.ecommerce.comics.serializers import *
 from applications.ecommerce.permissions import IsClient
 from django.contrib.auth.models import User
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.generics import (
@@ -90,7 +93,8 @@ class GetWishListAPIView(ListAPIView):
     '''
     queryset = WishList.objects.all()
     serializer_class = WishListSerializer
-    permission_classes = [IsClient]
+    permission_classes = [HasAPIKey and IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
 
 class GetWishListByUserAPIView(ListAPIView):
@@ -100,13 +104,21 @@ class GetWishListByUserAPIView(ListAPIView):
     '''
     queryset = WishList.objects.all()
     serializer_class = WishListSerializer
-    permission_classes = [IsClient]
+    permission_classes = [HasAPIKey and IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
-        uid = self.kwargs.get("uid")
-        user = User.objects.get(id=uid)
-        comments = WishList.objects.filter(user=user)
-        return comments
+        username = self.kwargs.get("username")
+        try:
+            user = User.objects.get(username=username)
+        
+        except IntegrityError:
+            print("No se pudo obtener el usuario")
+            return Response(status = 400, data = {"error":f"No se encontró el usuario {username}"})
+        
+        comics = WishList.objects.filter(user=user)
+        
+        return comics
 
 
 class PostWishListAPIView(CreateAPIView):
@@ -116,4 +128,5 @@ class PostWishListAPIView(CreateAPIView):
     '''
     queryset = WishList.objects.all()
     serializer_class = WishListSerializer
-    permission_classes = []
+    permission_classes = [HasAPIKey and IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
