@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 from django.contrib.auth.models import Group
-
+from django.contrib.auth.models import User
+from psycopg2 import IntegrityError
 
 class ClientGroupMeta(type):
     _instancias = {}
@@ -20,6 +21,12 @@ class GenericGroup:
 
     def eliminar_usuario(self, usuario):
         self.group.user_set.remove(usuario)
+
+    def agregar_usuario_username(self, username: str):
+        try:
+            self.group.user_set.add(User.objects.get(username=username))
+        except User.DoesNotExist:
+            print(f"No se pudo agregar al usuario {username} porque no existe")
 
 
 class ClientGroup(GenericGroup, metaclass = ClientGroupMeta):

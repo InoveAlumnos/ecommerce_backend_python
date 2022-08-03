@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from applications.ecommerce.groups import ClientGroup
 from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -54,7 +55,8 @@ def register(request):
 
             # Guardar el formulario si este es válido
             form.save()
-            
+
+            ClientGroup().agregar_usuario_username(request.POST.get("username"))
             # Redirigin a página de inicio de sesión
             return redirect('/ecommerce/login')
 

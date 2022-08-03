@@ -24,9 +24,18 @@
         <nav>
             <ul class="nav-links">
                 <li><a href="http://www.google.com"> API Reference </a></li>
-                <li><a href="/ecommerce/"> Home </a></li>    
-                <li><a href="/ecommerce/login/"> Login </a></li>
-                <li><a href="/ecommerce/signup/"> Signup </a></li>    
+                
+                {% if user.is_authenticated %}
+                    <li><a href="/ecommerce/logout"> Cerrar Sesión </a></li>
+                    
+                    {% if user.is_superuser %}
+                        <li><a href="/admin"> Administrador </a></li>
+                    {% endif %}
+
+                {% else %}
+                    <li><a href="/ecommerce/login/"> Login </a></li>
+                    <li><a href="/ecommerce/signup/"> Signup </a></li>    
+                {% endif %}
             </ul>
         </nav>
 
