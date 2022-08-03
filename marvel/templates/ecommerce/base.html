@@ -15,11 +15,21 @@
     <link rel="stylesheet" href="{% static 'ecommerce/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'ecommerce/css/navbar.css' %}">
     <link rel="icon" href="{% static 'ecommerce/img/captain-america.png' %}">
-    <title> {% block title %} Facebook CRM {% endblock %} </title>
+    <title> {% block title %} Marvel Backend {% endblock %} </title>
 
 </head>
 
 <body>
+    
+    <nav style="float:left;background-color: #b42529;padding: 0.7% 2%;left:50%;">
+        <a href="/ecommerce/"><img class="logo" src="{% static 'ecommerce/img/captain-america.png' %}" alt="logo" width="70em" height="70em"></a>
+        {% if user.is_authenticated %}
+        <ul class="nav-links" style="float:left;display:inline;vertical-align:middle;margin-top:7%;">
+            <li><a>¡Bienvenido {{ user.first_name }}!</a></li>
+        </ul>
+        {% endif %}
+    </nav>
+
     <header>
         <nav>
             <ul class="nav-links">
