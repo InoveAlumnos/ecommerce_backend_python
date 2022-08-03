@@ -1,10 +1,10 @@
-{% extends 'facebook_api/base.html' %}
+{% extends 'ecommerce/base.html' %}
 
 {% load static %}
 
 {% block head %}
 
-<link rel="stylesheet" href="{% static 'facebook_api/css/forms.css' %}">
+<link rel="stylesheet" href="{% static 'ecommerce/css/forms.css' %}">
 
 {% endblock head %}
 
@@ -13,7 +13,8 @@
 {% block content %}
 
 <div class="center">
-    <h1>Registrarse</h1>
+
+    <h1 style="color: #ec3d43; ">Registrarse</h1>
 
     <form method="POST" > 
         {% csrf_token %} 
@@ -58,9 +59,8 @@
         <input type="submit" value="Register"/>
         
         <div class="signup_link">
-            Ya estás registrado? <a href="/facebook/login">Iniciar sesión</a>
+            <!-- backend-truco -->
         </div>
-    
     </form>
 </div>
 

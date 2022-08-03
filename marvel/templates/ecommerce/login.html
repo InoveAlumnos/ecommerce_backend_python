@@ -1,9 +1,9 @@
-{% extends 'facebook_api/base.html' %}
+{% extends 'ecommerce/base.html' %}
 {% load static %}
 
 {% block head %}
 
-<link rel="stylesheet" href="{% static 'facebook_api/css/forms.css' %}">
+<link rel="stylesheet" href="{% static 'ecommerce/css/forms.css' %}">
 
 {% endblock head %}
 
@@ -14,7 +14,7 @@
 
 <div class="center">
 
-    <h1>Iniciar Sesión</h1>
+    <h1 style="color:#ec3d43;">Iniciar Sesión</h1>
 
     <form action="{% url 'login' %}" method="POST">
         {%csrf_token%}
@@ -34,14 +34,13 @@
       
         </div>
 
-        <!-- <div class="pass">
+        <div class="pass" style="color:#ec3d43;">
             Forgot Password?
-        </div> -->
+        </div>
         
         <input type="submit" value="Login">
         
         <div class="signup_link">
-            No estás registrado? <a href="/facebook/signup">Registrarse</a>
         </div>
 
     </form>
