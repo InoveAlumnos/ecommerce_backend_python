@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    {% load static %}
+
+    {% block head %}
+
+    {% endblock head %}
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'ecommerce/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'ecommerce/css/navbar.css' %}">
+    <link rel="icon" href="{% static 'ecommerce/img/captain-america.png' %}">
+    <title> {% block title %} Facebook CRM {% endblock %} </title>
+
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="google.com"> API Reference </a></li>
+                <img>
+                <li><a href="/facebook/logout"> Login </a></li>
+                <img>
+                <li><a href="/admin"> Signup </a></li>
+            
+            </ul>
+        </nav>
+
+    </header>
+
+    <div class="context">
+        <h1>¡Marvel Backend!</h1>
+    </div>
+
+    <div class="area">
+        <ul class="circles">
+           <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul> 
+    </div>
+
+</body>
+
+</html>
