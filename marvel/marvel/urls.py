@@ -25,7 +25,7 @@ description = '''
 <img src="https://lh3.googleusercontent.com/pw/AM-JKLWLct73ne_PgqQ146YMYjUgbswqg703xPZPnVImkFYwGbao5YksFGJFOlcoCJLfqIJ9_LRwFAwP9qinoEvsLx92NTOfAn54SgMLTgMvtii0r_rjneGjR53bx08OCncv4mRH4gNnpmEUuKofj59L9dAv=w1257-h103-no?authuser=0">
 </br>
 </br>
-<h2>Documentación general de APIs de la aplicación e-commerce</h2>
+<h2>Documentación general de APIs de la aplicación ecommerce</h2>
 <p>Para la autenticación por medio de TOKENS debemos agregar en el header:
 </br>
 <ul><li>'Authorization': 'Token 92937874f377a1ea17f7637ee07208622e5cb5e6'</li></ul>

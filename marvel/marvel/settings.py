@@ -182,8 +182,8 @@ CIAN = "\033[;36m"
 VERDE = "\033[;32m"
 
 # NOTE: Para manejo de sesión.
-LOGIN_REDIRECT_URL = '/e-commerce/index'
-LOGIN_URL = '/e-commerce/'
+LOGIN_REDIRECT_URL = '/ecommerce/'
+LOGIN_URL = '/ecommerce/login/'
 
 # NOTE: Logging settings
 

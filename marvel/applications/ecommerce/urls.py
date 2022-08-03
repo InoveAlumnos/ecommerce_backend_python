@@ -17,11 +17,9 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
-from django.shortcuts import redirect
+from django.urls import path
 from applications.ecommerce.views import *
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('base/', BaseView.as_view(), name='base'),

@@ -33,12 +33,12 @@
     </header>
 
     <div class="context">
-        {% block content %}{% endblock %}
+        <h1>¡Marvel Backend!</h1>
     </div>
-
+    
     <div class="area">
         <ul class="circles">
-           <li></li>
+            <li></li>
             <li></li>
             <li></li>
             <li></li>
@@ -49,6 +49,10 @@
             <li></li>
             <li></li>
         </ul> 
+    </div>
+
+    <div style="position:absolute;z-index:100;width:100%;height:auto;top:50%;">
+        {% block content %}{% endblock %}
     </div>
 
 </body>
