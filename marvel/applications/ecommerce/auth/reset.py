@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from applications.ecommerce.permissions import IsClient
 from applications.ecommerce.auth.serializers import ChangePasswordSerializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -50,10 +49,15 @@ class ResetPasswordView(UpdateAPIView):
             if account:
                 # Cambiar contraseña
                 user = User.objects.get(username = request.data.get("username"))
+
+                # Si es un usuario de grupo test - omitir cambio de contraseña
+                if user.groups.filter(name = "test").exists():
+                    return Response(status = 200, data = {"success": f"Se actualizó la contraseña de {user.username} satisfactoriamente"})
+
                 user.set_password(request.data.get("new_password"))
                 user.save()
 
-                return Response(status = 200, data = {"Success": "Password updated successfully"})
+                return Response(status = 200, data = {"success": f"Se actualizó la contraseña de {user.username} satisfactoriamente"})
             
             return Response({"old_password": ["Wrong password."]}, status = 401)
 
