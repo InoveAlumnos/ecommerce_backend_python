@@ -124,8 +124,8 @@ class LoginUserAPIView(APIView):
                         return Response(status = 200, data = {'username': username, 'token': token.key})
 
                     else:
-                        return Response(status = 401, data = {'error': 'Unauthorized', "error_message": "Credenciales inválidas"})
-                
+                        return Response(status = 200, data = {'username': username, 'token': token.key})
+                        
                 else:
                     print("Autenticación fallida:", request.data)
                     # Si las credenciales son invalidas, devolvemos mensaje de error:
