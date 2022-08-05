@@ -2,7 +2,7 @@ FROM python:3.9.5
 
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /opt/back_end
+WORKDIR /opt/backend
 
 COPY . .
 
@@ -10,6 +10,8 @@ RUN apt -y update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install -r requirements.txt
+
+RUN mkdir /opt/backend/marvel/logs
 
 # Environment variables
 ENV POSTGRES_DB=inove
@@ -23,4 +25,4 @@ ENV SECRET_KEY=django-insecure-x_^aet@$di37)k$5vb(kino$6w=px!&@-q4va4so^2c9s@)k8
 
 RUN python marvel/manage.py collectstatic --noinput
 
-CMD gunicorn --chdir /opt/back_end/marvel marvel.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn --chdir /opt/backend/marvel marvel.wsgi:application --bind 0.0.0.0:$PORT

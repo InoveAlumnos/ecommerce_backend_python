@@ -46,7 +46,7 @@ services:
       # Source code directory:
       - type: bind
         source: .
-        target: /opt/back_end
+        target: /opt/backend
 
     ports:
         - "8000:8000"
@@ -59,4 +59,4 @@ services:
     depends_on: ["db"]
     
     command: python marvel/manage.py runserver 0.0.0.0:8000
-    # command: gunicorn --chdir /opt/back_end/marvel marvel.wsgi:application --bind 0.0.0.0:8000
+    # command: gunicorn --chdir /opt/backend/marvel marvel.wsgi:application --bind 0.0.0.0:8000
