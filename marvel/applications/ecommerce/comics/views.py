@@ -97,7 +97,7 @@ class GetWishListAPIView(ListAPIView):
     authentication_classes = [TokenAuthentication]
 
 
-class GetWishListByUserAPIView(ListAPIView):
+class GetWishListByUsernameAPIView(ListAPIView):
     __doc__ = f'''
     `[METODO GET]`
     Esta vista de API nos devuelve una lista de todas las wishlists presentes en la base de datos.
@@ -115,6 +115,32 @@ class GetWishListByUserAPIView(ListAPIView):
         except IntegrityError:
             print("No se pudo obtener el usuario")
             return Response(status = 400, data = {"error":f"No se encontró el usuario {username}"})
+        
+        comics = WishList.objects.filter(user=user)
+        
+        return comics
+
+
+class GetWishListByUserIDAPIView(ListAPIView):
+    __doc__ = f'''
+    `[METODO GET]`
+    Esta vista de API nos devuelve una lista de todas las wishlists presentes en la base de datos.
+    '''
+    queryset = WishList.objects.all()
+    serializer_class = WishListSerializer
+    permission_classes = [HasAPIKey and IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        print("aaaaaaaaaaaaa")
+        uid = self.kwargs.get("uid")
+
+        try:
+            user = User.objects.get(id = uid)
+        
+        except IntegrityError:
+            print("No se pudo obtener el usuario")
+            return Response(status = 400, data = {"error":f"No se encontró el usuario {uid}"})
         
         comics = WishList.objects.filter(user=user)
         

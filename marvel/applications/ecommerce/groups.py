@@ -39,12 +39,24 @@ class ClientGroup(GenericGroup, metaclass = ClientGroupMeta):
         print("Es necesario realizar migraciones")
         pass        
 
+
 class ConsumerGroup(GenericGroup, metaclass = ClientGroupMeta):
     """
     Clase Singleton - De única instancia
     """
     try:
         group, _ = Group.objects.get_or_create(name = "consumer") 
+    except:
+        print("Es necesario realizar migraciones")
+        pass
+    
+
+class ConsumerGroup(GenericGroup, metaclass = ClientGroupMeta):
+    """
+    Clase Singleton - De única instancia
+    """
+    try:
+        group, _ = Group.objects.get_or_create(name = "test") 
     except:
         print("Es necesario realizar migraciones")
         pass

@@ -23,11 +23,11 @@ from applications.ecommerce.auth.reset import ResetPasswordView
 from applications.ecommerce.auth.profile import UpdateProfileAPIView
 
 urlpatterns = [
-    path('user/login/', LoginUserAPIView.as_view()),
-    path("user/signup/", SignUpUserAPIView.as_view()),
-    path("user/reset-password/", ResetPasswordView.as_view()),
-    path("user/profile/update/", UpdateProfileAPIView.as_view()),
-    path("client/login/", LoginClientAPIView.as_view()), 
-    path("client/signup/", SignUpClientAPIView.as_view()),
+    path('users/login', LoginUserAPIView.as_view()),
+    path("users/signup", SignUpUserAPIView.as_view()),
+    path("users/reset-password", ResetPasswordView.as_view()),
+    path("users/profile/update", UpdateProfileAPIView.as_view()),
+    path("clients/login", LoginClientAPIView.as_view()), 
+    path("clients/signup", SignUpClientAPIView.as_view()),
     # path('client/forgot-password/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]

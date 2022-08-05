@@ -22,7 +22,6 @@ from applications.ecommerce.views import *
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('base/', BaseView.as_view(), name='base'),
 
     path('login/', auth_views.LoginView.as_view(
                     template_name='ecommerce/login.html', 

@@ -22,7 +22,7 @@ from applications.ecommerce.comics.fetch import FetchDatabaseAPIView
 
 urlpatterns = [
     # APIs de Marvel
-    path('comics/fetch-database/', FetchDatabaseAPIView.as_view(), name='fetch-database'),
+    path('comics/fetch-database', FetchDatabaseAPIView.as_view(), name='fetch-database'),
     
     # Comic API View:
     path('comics/get', GetComicAPIView.as_view(),),
@@ -33,6 +33,7 @@ urlpatterns = [
 
     # WishList API View
     path('wish/get', GetWishListAPIView.as_view()),
-    path("wish/get/<username>", GetWishListByUserAPIView.as_view()),
-    path('wish/post/', PostWishListAPIView.as_view()),
+    path("wish/get-by-username/<username>", GetWishListByUsernameAPIView.as_view()),
+    path("wish/get-by-uid/<uid>", GetWishListByUserIDAPIView.as_view()),
+    path('wish/post', PostWishListAPIView.as_view()),
 ]
