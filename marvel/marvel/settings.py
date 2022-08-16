@@ -58,6 +58,8 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'whitenoise.runserver_nostatic',
     'django_rest_passwordreset',
+    # 'rest_framework_swagger',
+    'drf_yasg',
 ]
 
 LOCAL_APPS = [

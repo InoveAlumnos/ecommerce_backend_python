@@ -6,8 +6,16 @@
     padding: 0px;
 }
 
-header {
+/* opcion 1 */
+/* header {
     background-color: #b42529;
+    padding: 2% 2.5%;
+    float: right;
+} */
+
+/* opcion 2 */
+header {
+    background-color: black;
     padding: 2% 2.5%;
     float: right;
 }

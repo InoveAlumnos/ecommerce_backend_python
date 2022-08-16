@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.shortcuts import redirect
 from django.views.generic import TemplateView 
 from rest_framework.schemas import get_schema_view
+from rest_framework_swagger.views import get_swagger_view
 
 # Docs description - Swagger - OpenAPI
 description = '''
@@ -34,6 +35,8 @@ Donde 92937874f377a1ea17f7637ee07208622e5cb5e6 es un ejemplo del Token Key.
 </p>
 '''
 
+schema_view = get_swagger_view(title='Pastebin API')
+
 urlpatterns = [
     path('', lambda request: redirect('/ecommerce/', permanent = True)),
     path('/', lambda request: redirect('/ecommerce/', permanent = True)),
@@ -48,8 +51,9 @@ urlpatterns = [
         name = 'swagger-ui'),
     
     path('openapi', get_schema_view(
-            title="Inove - Marvel Back End",
-            description=description,
-            version="1.0.0"), 
-            name='openapi-schema'),
+            title = "Inove - Marvel Back End",
+            description = description,
+            version = "1.0.0"), 
+            name = 'openapi-schema'),
+
 ]

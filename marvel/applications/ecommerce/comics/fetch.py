@@ -54,6 +54,8 @@ class FetchDatabaseAPIView(APIView):
         # Eliminar todos los comics anteriores
         Comic.objects.all().delete()
 
+        # precio 0 - stock 0
+
         # Obtener comics
         comics_guardados = 0
         offset = 0

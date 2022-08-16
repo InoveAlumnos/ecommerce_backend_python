@@ -49,3 +49,4 @@ class ProfileDataSerializer(serializers.Serializer):
     class Meta:
         model = Profile
         fields = ("username",)
+        

@@ -20,9 +20,10 @@
 </head>
 
 <body>
-    
-    <nav style="float:left;background-color: #b42529;padding: 0.7% 2%;left:50%;">
-        <a href="/ecommerce/"><img class="logo" src="{% static 'ecommerce/img/captain-america.png' %}" alt="logo" width="70em" height="70em"></a>
+
+    <nav style="float:left;background-color:black;padding: 0.7% 2%;left:50%;">
+        <a href="/ecommerce/"><img class="logo" src="{% static 'ecommerce/img/captain-america.png' %}" alt="logo"
+                width="70em" height="70em"></a>
         {% if user.is_authenticated %}
         <ul class="nav-links" style="float:left;display:inline;vertical-align:middle;margin-top:7%;">
             <li><a>¡Bienvenido {{ user.first_name }}!</a></li>
@@ -36,40 +37,72 @@
         <nav>
             <ul class="nav-links">
                 <li><a href="http://www.google.com"> API Reference </a></li>
-                
+
                 {% if user.is_authenticated %}
-                    <li><a href="/ecommerce/logout"> Cerrar Sesión </a></li>
-                    
-                    {% if user.is_superuser %}
-                        <li><a href="/admin"> Administrador </a></li>
-                    {% endif %}
+                <li><a href="/ecommerce/logout"> Cerrar Sesión </a></li>
+
+                {% if user.is_superuser %}
+                <li><a href="/admin"> Administrador </a></li>
+                {% endif %}
 
                 {% else %}
-                    <li><a href="/ecommerce/login"> Login </a></li>
-                    <li><a href="/ecommerce/signup"> Signup </a></li>    
+                <li><a href="/ecommerce/login"> Login </a></li>
+                <li><a href="/ecommerce/signup"> Signup </a></li>
                 {% endif %}
             </ul>
         </nav>
 
     </header>
 
-    <div class="context">
+    <div class="context" style="z-index: 100;">
         <h1>¡Marvel Backend!</h1>
+
+        {% if user.is_authenticated %}
+        <div class="api-key">
+                <h2> Tu Api-Key 👉 </h2>
+                
+                <div class="copy-box">
+                    <blockquote id="myInput"> {{ api_key }} </blockquote>
+                    
+                    <button class="copy-button" id="boton">
+                        <div id="copy-logo-container">
+                            <div id="box1" class="boxesss">
+                              <div id="box2" class="boxesss"></div>  
+                            </div></div>
+                        Copy
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+
+
+        <script>
+            function copyFunction() {
+                const copyText = document.getElementById("myInput").textContent;
+                const textArea = document.createElement('textarea');
+                textArea.textContent = copyText;
+                document.body.append(textArea);
+                textArea.select();
+                document.execCommand("copy");
+                boton.innerText = "Text copied";
+                textArea.remove();
+            }
+            document.getElementById('boton').addEventListener('click', copyFunction);
+        </script>
     </div>
-    
+
     <div class="area">
         <ul class="circles">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul> 
+            <!-- Imagen original es de 2110x1093 px -->
+            <li><img src="{% static 'ecommerce/img/inove.png' %}" width="211px" height="109.3px"></li>
+            <li><img src="{% static 'ecommerce/img/inove-verde.png' %}" width="60px" height="60px"></li>
+            <li><img src="{% static 'ecommerce/img/inove-verde.png' %}" width="60px" height="60px"></li>
+            <li><img src="{% static 'ecommerce/img/azul.png' %}" width="60px" height="60px"></li>
+            <li><img src="{% static 'ecommerce/img/naranja.png' %}" width="60px" height="60px"></li>
+            <li><img src="{% static 'ecommerce/img/rojo.png' %}" width="60px" height="60px"></li>
+            <li><img src="{% static 'ecommerce/img/js.png' %}" width="60px" height="60px"></li>
+            <li><img src="{% static 'ecommerce/img/react.png' %}" width="60px" height="60px"></li>
+        </ul>
     </div>
 
     <div style="position:absolute;z-index:100;width:100%;height:auto;top:50%;">

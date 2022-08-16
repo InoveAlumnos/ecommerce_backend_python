@@ -7,6 +7,8 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from rest_framework_api_key.models import APIKey
+
 
 
 class BaseView(TemplateView):
@@ -74,3 +76,9 @@ class IndexView(TemplateView):
     '''
 
     template_name = 'ecommerce/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["api_key"] = APIKey.objects.create_key(name = self.request.user.username)[1]
+        print(context)
+        return context
