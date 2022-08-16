@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import os 
+import os
 
 
 def get_env(var):
@@ -38,7 +38,8 @@ SECRET_KEY = 'django-insecure-q6!*-w(7gh2+a#qu=#4vl6_p4(e%=pm03f!8+re_!wbo-wu9w8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost', 'inove-marvel-backend.herokuapp.com']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost',
+                 'inove-marvel-backend.herokuapp.com']
 
 # Application definition
 
@@ -207,13 +208,30 @@ LOGGING = {
             'filename': os.path.join(LOGGING_DIR, 'general-batch.log'),
             'maxBytes': 1024*1024*15,  # 15MB
             'backupCount': 10,
-            'formatter': 'generic',        },
+            'formatter': 'generic', },
     },
     'loggers': {
         'django': {
             'handlers': ['general'],
             'propagate': True,
             'level': 'DEBUG',
+        }
+    }
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'X-Api-Key': {
+            'description': 'Acá tenés que poner tu **ApiKey**, sólo tenés que pegarla \n **ejemplo: x6CKJooZ.DPiPTDrEQKnTddnejNqRlx3QP3oMWGzY** ',
+            'type': 'apiKey',
+            'name': 'X-Api-Key',
+            'in': 'header'
+        },
+        'Authorization': {
+            'description': 'Acá tenés que poner tu **Token de usuario**, con el **prefijo Token** \n **ejemplo: Token ea0dfcbbdff1a55ae26a67cd71bcc6adffb1f200**',
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
         }
     }
 }

@@ -16,10 +16,14 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 from django.shortcuts import redirect
-from django.views.generic import TemplateView 
-from rest_framework.schemas import get_schema_view
-from rest_framework_swagger.views import get_swagger_view
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+
 
 # Docs description - Swagger - OpenAPI
 description = '''
@@ -35,25 +39,28 @@ Donde 92937874f377a1ea17f7637ee07208622e5cb5e6 es un ejemplo del Token Key.
 </p>
 '''
 
-schema_view = get_swagger_view(title='Pastebin API')
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Inove Marvel e-commerce",
+        default_version='1.0.0',
+        description=description,
+        contact=openapi.Contact(email="info@inove.com.ar"),
+        license=openapi.License(name="Inove Coding School."),
+    ),
+    public=True,
+    permission_classes= [],
+    authentication_classes= []
+)
 
 urlpatterns = [
-    path('', lambda request: redirect('/ecommerce/', permanent = True)),
-    path('/', lambda request: redirect('/ecommerce/', permanent = True)),
+    path('', lambda request: redirect('/ecommerce/', permanent=True)),
+    path('/', lambda request: redirect('/ecommerce/', permanent=True)),
     path('admin/', admin.site.urls),
     path('ecommerce/', include('applications.ecommerce.urls')),
     path('ecommerce/', include('applications.ecommerce.auth.urls')),
     path('ecommerce/', include('applications.ecommerce.comics.urls')),
 
-    path('api-docs/', TemplateView.as_view(
-        template_name = 'api-docs/swagger-ui.html',
-        extra_context = {'schema_url':'openapi-schema'}), 
-        name = 'swagger-ui'),
-    
-    path('openapi', get_schema_view(
-            title = "Inove - Marvel Back End",
-            description = description,
-            version = "1.0.0"), 
-            name = 'openapi-schema'),
-
+    path('api-docs/', lambda request: redirect("/api-docs/swagger", permanent=True)),
+    path('api-docs/swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api-docs/redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
 ]

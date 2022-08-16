@@ -12,6 +12,7 @@ from rest_framework.parsers import JSONParser
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
         
+
 class SignUpClientAPIView(APIView):
     """
     SignUpUserAPIView \n
@@ -92,14 +93,14 @@ class SignUpClientAPIView(APIView):
                     ClientGroup().agregar_usuario(user)
 
                 except IntegrityError:
-                    return Response(status = 400, data = {"error": f"El nombre de usuario {request.data['username']} no está disponible"})
+                    return Response(status = 400, data = {"error": "Unavailable", "message": f"El nombre de usuario {request.data['username']} no está disponible"})
 
                 except Exception as e:                    
                     return Response(status = 500, data = {"error": "Internal server error", "description": e})
                 
                 return Response(status = 200, data = serializer.data)
             
-            return Response(status = 400, data = {"error": "Bad Request", "error_message": f"{serializer.errors}"})
+            return Response(status = 400, data = {"error": "Bad Request", "message": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
         except Exception as e:
             return Response(status = 500, data = {"error": "Internal server error", "description": e})
@@ -198,8 +199,8 @@ class SignUpUserAPIView(APIView):
                 profile.save()
 
                 return Response(status = 200, data = serializer.data)
-            
-            return Response(status = 400, data = {"error": "Bad Request", "message": "No se enviaron los valores necesarios"})
+
+            return Response(status = 400, data = {"error": "Bad Request", "message": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
         except Exception as e:
             print(e)

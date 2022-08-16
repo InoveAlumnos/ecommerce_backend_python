@@ -104,23 +104,21 @@ class LoginClientAPIView(APIView):
                 if account:
                     # Devolvemos Api-Key para cliente
                     if account.groups.filter(name = ClientGroup.group.name).exists():
-                        # Obtenemos la Api-Key del usuario
-                        api_key = APIKey.objects.get(user = account)
 
-                        # Crear una apikey para el usuario. # TODO: Agregarle fecha de expiración 
+                        # Crear una apikey para el usuario.
                         _, key = APIKey.objects.create_key(name = username)
                         
-                        return Response(status = 200, data = {'username': username, 'api-key': api_key})
+                        return Response(status = 200, data = {'username': username, 'api-key': key})
                     
                     else:
-                        return Response(status = 403, data = {"error": "Unauthorized", "message": "Tu usuario no pertenece al grupo cliente"})
+                        return Response(status = 403, data = {"error": "Unauthorized", "message": "Tu usuario no tiene los permisos para realizar esta acción"})
 
                 else:
                     print("Autenticación fallida:", request.data)
                     # Si las credenciales son invalidas, devolvemos mensaje de error:
                     return Response(status = 401, data = {"error": "Unauthorized", "message": "Credenciales invalidas"})
 
-            return Response(status = 400, data = {"error": "Bad Request", "error_message": f"No se enviaron los parámetros necesarios"})
+            return Response(status = 400, data = {"error": "Bad Request", "message": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
         except Exception as e:
             print(e)
@@ -160,7 +158,7 @@ class LoginUserAPIView(APIView):
         ),
 
         "400": openapi.Response(
-            description='Bad Request',
+            description='Bad Request - Faltan parámetros en el request',
             examples={
                 "application/json": {
                     'error': 'Bad Request',
@@ -170,11 +168,20 @@ class LoginUserAPIView(APIView):
         ),
 
         "401": openapi.Response(
-            description='Unauthorized',
+            description='Unauthorized - No matchean usuario y contraseña',
             examples={
                 "application/json": {
                     'error': 'Unauthorized',
                     'message': 'Credenciales inválidas'
+                }
+            }
+        ),
+
+        "403": openapi.Response(
+            description='Forbidden - Falta API Key',
+            examples={
+                "application/json": {
+                    'detail': 'Usted no tiene permiso para realizar esta acción.'
                 }
             }
         ),
@@ -220,9 +227,9 @@ class LoginUserAPIView(APIView):
                 else:
                     print("Autenticación fallida:", request.data)
                     # Si las credenciales son invalidas, devolvemos mensaje de error:
-                    return Response(status=401, data={"error": "Unauthorized", "error_message": "Credenciales invalidas"})
+                    return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales invalidas"})
 
-            return Response(status = 400, data = {"error": "Bad Request", "error_message": f"{serializer.errors}"})
+            return Response(status = 400, data = {"error": "Bad Request", "message": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
         except Exception as e:
             print(e)
