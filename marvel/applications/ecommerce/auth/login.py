@@ -53,10 +53,13 @@ class LoginClientAPIView(APIView):
                 if account:
                     # Devolvemos Api-Key para cliente
                     if account.groups.filter(name = ClientGroup.group.name).exists():
+                        # Obtenemos la Api-Key del usuario
+                        api_key = APIKey.objects.get(user = account)
+
                         # Crear una apikey para el usuario. # TODO: Agregarle fecha de expiración 
                         _, key = APIKey.objects.create_key(name = username)
                         
-                        return Response(status = 200, data = {'username': username, 'api-key': key})
+                        return Response(status = 200, data = {'username': username, 'api-key': api_key})
                     
                     else:
                         return Response(status = 401, data = {"error": "Unauthorized", "error_message": "Tu usuario no pertenece al grupo cliente"})
@@ -136,3 +139,13 @@ class LoginUserAPIView(APIView):
         except Exception as e:
             print(e)
             return Response(status = 500, data = {"error": "Internal server error", "description": e})
+
+
+class TestEndpoint(APIView):
+    """
+    Endpoint de prueba para ver si una apikey es valida
+    """
+    permission_classes = [HasAPIKey]
+
+    def get(self, request, *args, **kwargs):
+        return Response(status = 200, data = {"message": "OK"})

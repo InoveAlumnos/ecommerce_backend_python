@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from tkinter import E
 from applications.ecommerce.groups import ClientGroup
 from django import forms
 from django.http import HttpResponseRedirect
@@ -79,6 +80,8 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["api_key"] = APIKey.objects.create_key(name = self.request.user.username)[1]
-        print(context)
+        
+        if self.request.user.is_authenticated:
+            context["api_key"] = APIKey.objects.create_key(name = self.request.user.username)[1]
+
         return context
