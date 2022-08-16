@@ -17,7 +17,7 @@ Including another URLconf
 """
 
 from django.urls import path, include
-from applications.ecommerce.auth.login import LoginClientAPIView, LoginUserAPIView, TestEndpoint
+from applications.ecommerce.auth.login import LoginClientAPIView, LoginUserAPIView
 from applications.ecommerce.auth.signup import SignUpClientAPIView, SignUpUserAPIView
 from applications.ecommerce.auth.reset import ResetPasswordView
 from applications.ecommerce.auth.profile import UpdateProfileAPIView
@@ -30,5 +30,4 @@ urlpatterns = [
     path("clients/login", LoginClientAPIView.as_view()), 
     path("clients/signup", SignUpClientAPIView.as_view()),
     # path('client/forgot-password/', include('django_rest_passwordreset.urls', namespace='password_reset')),
-    path('test', TestEndpoint.as_view()),
 ]

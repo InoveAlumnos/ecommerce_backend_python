@@ -31,8 +31,8 @@ class GetComicAPIView(ListAPIView):
     '''
 
     serializer_class = ComicSerializer
-    permission_classes = [HasAPIKey and IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    permission_classes = [HasAPIKey]
+    authentication_classes = []
     
     def get_queryset(self):
         limit = self.request.query_params.get('limit', 20)
@@ -132,7 +132,6 @@ class GetWishListByUserIDAPIView(ListAPIView):
     authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
-        print("aaaaaaaaaaaaa")
         uid = self.kwargs.get("uid")
 
         try:

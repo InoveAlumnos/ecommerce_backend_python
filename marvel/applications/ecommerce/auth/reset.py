@@ -8,7 +8,9 @@ from rest_framework.generics import UpdateAPIView
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.permissions import IsAuthenticated   
 from rest_framework.authentication import TokenAuthentication
-
+from rest_framework.parsers import JSONParser
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 class ResetPasswordView(UpdateAPIView):
     '''
@@ -16,25 +18,54 @@ class ResetPasswordView(UpdateAPIView):
 
     @DESCRIPTION: Cambiar/Resetear contraseña de un usuario - **NO** aplica a usuarios que hayan olvidado su contraseña,
                   está pensado para usuarios **logueados** que desean cambiar su contraseña \n
-
-    @ROUTE: /user/reset-password/ \n
-
-    @METHODS: PATCH \n
-
-    @HEADERS: \n
-        - Content-Type: application/json \n
-        - Authorization: Token <token> \n
-
-    @PAYLOAD: \n
-        - username: str \n
-        - old_password: str \n
-        - new_password: str \n
     '''
 
     serializer_class = ChangePasswordSerializer
-    model = User
+    parser_classes = [JSONParser]
     permission_classes = [HasAPIKey and IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+
+    @swagger_auto_schema(
+    request_body = openapi.Schema(
+            type=openapi.TYPE_OBJECT, 
+            properties = {
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='username'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='old_password'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='new_password'),
+            }
+    ),
+    responses = {
+        "200": openapi.Response(
+            description='Registro exitoso',
+            examples = {
+                "application/json": {
+                    "username": "username",
+                    "api-key": "hlvQaIRo.1lrb7dV69yjb07vhRLsE7wrCHNOmwsav",
+                }
+            }
+        ),
+
+        "400": openapi.Response(
+            description='Bad Request',
+            examples={
+                "application/json": {
+                    'error': 'Bad Request',
+                    'message': 'No se enviaron los parámetros necesarios'
+                }
+            }
+        ),
+
+        "500": openapi.Response(
+            description='Internal Server Error',
+            examples={
+                "application/json": {
+                    'error': 'Internal Server Error',
+                    'message': 'Ocurrió un error en el servidor'
+                }
+            }
+        ),
+    }
+    )
 
     def patch(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)

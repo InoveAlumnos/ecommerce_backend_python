@@ -9,34 +9,85 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.authtoken.models import Token
 from rest_framework_api_key.models import APIKey
+from django.contrib.auth.models import User
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 
 class LoginClientAPIView(APIView):
-    '''
-    @NAME: LoginClientAPIView
+    """
+    LoginClientAPIView \n
 
-    @DESC: Vista de API personalizada para recibir peticiones de tipo POST para Login de clientes.
-    
-    @ROUTE: /client/login
-
-    @METHODS: POST
-
-    @HEADERS: 
-        - Content-Type: application/json
-
-    @PAYLOAD: 
-        - username: str
-        - password: str
-
-    @RETURN:
-        - username: str
-        - api-key: str
-    '''
+    Vista de API personalizada para recibir peticiones de tipo POST para Login de clientes. \n
+    """
 
     serializer_class = LoginSerializer
     parser_classes = [JSONParser]
     authentication_classes = []
     permission_classes = []
+
+
+    @swagger_auto_schema(
+    request_body = openapi.Schema(
+            type=openapi.TYPE_OBJECT, 
+            properties = {
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='first_name'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='last_name'),
+            }
+        ),
+    responses = {
+        "200": openapi.Response(
+            description='Registro exitoso',
+            examples = {
+                "application/json": {
+                    "username": "username",
+                    "api-key": "hlvQaIRo.1lrb7dV69yjb07vhRLsE7wrCHNOmwsav",
+                }
+            }
+        ),
+
+        "400": openapi.Response(
+            description='Bad Request',
+            examples={
+                "application/json": {
+                    'error': 'Bad Request',
+                    'message': 'No se enviaron los parámetros necesarios'
+                }
+            }
+        ),
+
+        "401": openapi.Response(
+            description='Unauthorized',
+            examples={
+                "application/json": {
+                    'error': 'Unauthorized',
+                    'message': 'Credenciales inválidas'
+                }
+            }
+        ),
+        
+        "403": openapi.Response(
+            description='Unauthorized',
+            examples={
+                "application/json": {
+                    'error': 'Missing Permissions',
+                    'message': 'Tu usuario no tiene los permisos para realizar esta acción'
+                }
+            }
+        ),
+
+        "500": openapi.Response(
+            description='Internal Server Error',
+            examples={
+                "application/json": {
+                    'error': 'Internal Server Error',
+                    'message': 'Ocurrió un error en el servidor'
+                }
+            }
+        ),
+    }
+    )
+
 
     def post(self, request, *args, **kwargs):
 
@@ -62,14 +113,14 @@ class LoginClientAPIView(APIView):
                         return Response(status = 200, data = {'username': username, 'api-key': api_key})
                     
                     else:
-                        return Response(status = 401, data = {"error": "Unauthorized", "error_message": "Tu usuario no pertenece al grupo cliente"})
+                        return Response(status = 403, data = {"error": "Unauthorized", "message": "Tu usuario no pertenece al grupo cliente"})
 
                 else:
                     print("Autenticación fallida:", request.data)
                     # Si las credenciales son invalidas, devolvemos mensaje de error:
-                    return Response(status = 401, data = {"error": "Unauthorized", "error_message": "Credenciales invalidas"})
+                    return Response(status = 401, data = {"error": "Unauthorized", "message": "Credenciales invalidas"})
 
-            return Response(status = 400, data = {"error": "Bad Request", "error_message": f"{serializer.errors}"})
+            return Response(status = 400, data = {"error": "Bad Request", "error_message": f"No se enviaron los parámetros necesarios"})
 
         except Exception as e:
             print(e)
@@ -77,32 +128,69 @@ class LoginClientAPIView(APIView):
 
 
 class LoginUserAPIView(APIView):
-    '''
-    @NAME: LoginUserAPIView
+    """
+    LoginUserAPIView \n
 
-    @DESC: Vista de API personalizada para recibir peticiones de tipo POST para Login de usuarios.
-    
-    @ROUTE: /user/login
-
-    @METHODS: POST
-
-    @HEADERS: 
-        - Content-Type: application/json
-        - X-Api-Key: <api-key>
-
-    @PAYLOAD: 
-        - username: str
-        - password: str
-
-    @RETURN:
-        - username: str
-        - token: str
-    '''
+    Vista de API personalizada para recibir peticiones de tipo POST para Login de usuarios. \n
+    """
 
     serializer_class = LoginSerializer
     parser_classes = [JSONParser]
     authentication_classes = []
     permission_classes = [HasAPIKey]
+
+
+    @swagger_auto_schema(
+    request_body = openapi.Schema(
+            type=openapi.TYPE_OBJECT, 
+            properties = {
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='first_name'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='last_name'),
+            }
+        ),
+    responses = {
+        "200": openapi.Response(
+            description='Registro exitoso',
+            examples = {
+                "application/json": {
+                    "username": "username",
+                    "api-key": "hlvQaIRo.1lrb7dV69yjb07vhRLsE7wrCHNOmwsav",
+                }
+            }
+        ),
+
+        "400": openapi.Response(
+            description='Bad Request',
+            examples={
+                "application/json": {
+                    'error': 'Bad Request',
+                    'message': 'No se enviaron los parámetros necesarios'
+                }
+            }
+        ),
+
+        "401": openapi.Response(
+            description='Unauthorized',
+            examples={
+                "application/json": {
+                    'error': 'Unauthorized',
+                    'message': 'Credenciales inválidas'
+                }
+            }
+        ),
+        
+        "500": openapi.Response(
+            description='Internal Server Error',
+            examples={
+                "application/json": {
+                    'error': 'Internal Server Error',
+                    'message': 'Ocurrió un error en el servidor'
+                }
+            }
+        ),
+    }
+    )
+
 
     def post(self, request, *args, **kwargs):
             
@@ -139,13 +227,3 @@ class LoginUserAPIView(APIView):
         except Exception as e:
             print(e)
             return Response(status = 500, data = {"error": "Internal server error", "description": e})
-
-
-class TestEndpoint(APIView):
-    """
-    Endpoint de prueba para ver si una apikey es valida
-    """
-    permission_classes = [HasAPIKey]
-
-    def get(self, request, *args, **kwargs):
-        return Response(status = 200, data = {"message": "OK"})
