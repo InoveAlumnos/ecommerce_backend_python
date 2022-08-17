@@ -11,14 +11,21 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.parsers import JSONParser
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from typing import List
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 
-class ResetPasswordView(UpdateAPIView):
-    '''
-    @NAME: ResetPasswordView \n
+class ResetPasswordView(APIView):
+    __doc__ = """
+    ResetPasswordView \n
 
-    @DESCRIPTION: Cambiar/Resetear contraseña de un usuario - **NO** aplica a usuarios que hayan olvidado su contraseña,
-                  está pensado para usuarios **logueados** que desean cambiar su contraseña \n
-    '''
+    Vista de API personalizada para recibir peticiones de tipo PATCH para cambiar contraseña de un usuario. **NO** aplica a 
+    usuarios que hayan olvidado su contraseña, está pensado para usuarios **logueados** que desean cambiar su contraseña \n
+
+    Para usar este endpoint, es necesario enviar la api-key en el header en el campo **X-Api-Key** y el token del usuario
+    a actualizar en el campo **Authorization**.\n
+    
+    """
 
     serializer_class = ChangePasswordSerializer
     parser_classes = [JSONParser]

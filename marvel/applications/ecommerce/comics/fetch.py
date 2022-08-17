@@ -45,6 +45,7 @@ class FetchDatabaseAPIView(APIView):
 
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
+    swagger_schema = None
 
 
     def post(self, request, *args, **kwargs):

@@ -15,7 +15,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 class LoginClientAPIView(APIView):
-    """
+    __doc__ = """
     LoginClientAPIView \n
 
     Vista de API personalizada para recibir peticiones de tipo POST para Login de clientes. \n
@@ -126,10 +126,12 @@ class LoginClientAPIView(APIView):
 
 
 class LoginUserAPIView(APIView):
-    """
+    __doc__ = """
     LoginUserAPIView \n
 
     Vista de API personalizada para recibir peticiones de tipo POST para Login de usuarios. \n
+
+    Para usar este endpoint, es necesario enviar la api-key en el header en el campo **X-Api-Key**. \n
     """
 
     serializer_class = LoginSerializer

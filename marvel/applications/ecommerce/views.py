@@ -11,7 +11,6 @@ from django.contrib.auth.models import User
 from rest_framework_api_key.models import APIKey
 
 
-
 class BaseView(TemplateView):
     '''
     Base template

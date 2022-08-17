@@ -14,7 +14,7 @@ from drf_yasg import openapi
         
 
 class SignUpClientAPIView(APIView):
-    """
+    __doc__ = """
     SignUpUserAPIView \n
 
     Vista de API personalizada para recibir peticiones de tipo POST para Registro de Clientes. \n
@@ -107,10 +107,12 @@ class SignUpClientAPIView(APIView):
 
 
 class SignUpUserAPIView(APIView):
-    """
+    __doc__ = """
     SignUpUserAPIView \n
 
     Vista de API personalizada para recibir peticiones de tipo POST para Registro de usuarios. \n
+
+    Para usar este endpoint, es necesario enviar la api-key en el header en el campo **X-Api-Key**. \n
     """
 
     serializer_class = RegisterSerializer

@@ -17,10 +17,15 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 class UpdateProfileAPIView(APIView):
-    """
+    __doc__ = """
     UpdateProfileAPIView \n
 
-    Vista de API personalizada para recibir peticiones de tipo POST para actualizar el perfil de un cliente. \n
+    Vista de API personalizada para recibir peticiones de tipo PATCH para actualizar el perfil de un cliente. \n
+
+    No es necesario enviar todos los campos a actualizar, el único campo obligatorio es **username**, el resto son opcionales. \n
+    
+    Para usar este endpoint, es necesario enviar la api-key en el header en el campo **X-Api-Key** y el token del usuario
+    a actualizar en el campo **Authorization**.\n
     """
     
     serializer_class = ProfileDataSerializer

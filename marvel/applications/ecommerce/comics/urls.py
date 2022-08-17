@@ -27,7 +27,7 @@ urlpatterns = [
     # Comic API View:
     path('comics/get', GetComicAPIView.as_view(),),
     path('comics/post', PostComicAPIView.as_view()),
-    # path('comics/get-post', ListCreateComicAPIView.as_view()),
+    path('comics/get-post', ListCreateComicAPIView.as_view()),
     path('comics/<pk>/update', RetrieveUpdateComicAPIView.as_view()),
     path('comics/<pk>/delete', DestroyComicAPIView.as_view()),
 
