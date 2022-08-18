@@ -86,7 +86,6 @@ class SignUpClientAPIView(APIView):
             serializer = self.serializer_class(data = request.data)
 
             if serializer.is_valid():
-                
                 try:
                     user = serializer.save()
                     # Agregar al usuario al grupo "client"
@@ -98,7 +97,9 @@ class SignUpClientAPIView(APIView):
                 except Exception as e:                    
                     return Response(status = 500, data = {"error": "Internal server error", "description": e})
                 
-                return Response(status = 200, data = serializer.data)
+                user_data = {"user_id": user.id}
+                user_data.update(serializer.data)
+                return Response(status = 200, data = user_data)
             
             return Response(status = 400, data = {"error": "Bad Request", "message": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
@@ -200,7 +201,9 @@ class SignUpUserAPIView(APIView):
                                 for key in dict(request.data) if key in ['phone', "address", "province_state", "country", "postal_code"]})
                 profile.save()
 
-                return Response(status = 200, data = serializer.data)
+                user_data = {"user_id": user.id}
+                user_data.update(serializer.data)
+                return Response(status = 200, data = user_data)
 
             return Response(status = 400, data = {"error": "Bad Request", "message": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 

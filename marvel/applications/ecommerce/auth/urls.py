@@ -20,13 +20,14 @@ from django.urls import path, include
 from applications.ecommerce.auth.login import LoginClientAPIView, LoginUserAPIView
 from applications.ecommerce.auth.signup import SignUpClientAPIView, SignUpUserAPIView
 from applications.ecommerce.auth.reset import ResetPasswordView
-from applications.ecommerce.auth.profile import UpdateProfileAPIView
+from applications.ecommerce.auth.profile import UpdateProfileAPIView, GetProfileDataByUserId
 
 urlpatterns = [
     path('users/login', LoginUserAPIView.as_view()),
     path("users/signup", SignUpUserAPIView.as_view()),
     path("users/reset-password", ResetPasswordView.as_view()),
     path("users/profile/update", UpdateProfileAPIView.as_view()),
+    path("users/profile/get/<uid>", GetProfileDataByUserId.as_view()),
     path("clients/login", LoginClientAPIView.as_view()), 
     path("clients/signup", SignUpClientAPIView.as_view()),
     # path('client/forgot-password/', include('django_rest_passwordreset.urls', namespace='password_reset')),

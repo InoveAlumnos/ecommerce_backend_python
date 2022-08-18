@@ -107,8 +107,8 @@ class LoginClientAPIView(APIView):
 
                         # Crear una apikey para el usuario.
                         _, key = APIKey.objects.create_key(name = username)
-                        
-                        return Response(status = 200, data = {'username': username, 'api-key': key})
+                        user = User.objects.get(username = username)
+                        return Response(status = 200, data = {'username': username, 'uid': user.id, 'api-key': key})
                     
                     else:
                         return Response(status = 403, data = {"error": "Unauthorized", "message": "Tu usuario no tiene los permisos para realizar esta acción"})
@@ -211,20 +211,21 @@ class LoginUserAPIView(APIView):
                 username = request.data.get('username')
                 password = request.data.get('password')
                 account = authenticate(username = username, password = password)
-
                 # Si el usuario existe y sus credenciales son validas, intentamos obtener el token
                 if account:
+
                     try:
                         token = Token.objects.get(user=account)
+                        user = User.objects.get(username = username)
 
                     except Token.DoesNotExist:
                         # En caso de token inexistente, lo creamos
                         token = Token.objects.create(user=account)
-
-                        return Response(status = 200, data = {'username': username, 'token': token.key})
+                        
+                        return Response(status = 200, data = {'username': username, 'uid': user.id, 'token': token.key})
 
                     else:
-                        return Response(status = 200, data = {'username': username, 'token': token.key})
+                        return Response(status = 200, data = {'username': username, 'uid': user.id, 'token': token.key})
 
                 else:
                     print("Autenticación fallida:", request.data)

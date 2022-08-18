@@ -45,12 +45,8 @@ class WishList(models.Model):
 
     cart = models.BooleanField(verbose_name = 'On Cart', default = None)
 
-    # En carrito
     on_cart_qty = models.PositiveIntegerField(
         verbose_name = 'wished_qty', default = 0)
-
-    # bought_qty = models.PositiveIntegerField(
-        # verbose_name = 'buied_qty', default = 0)
 
     class Meta:
         db_table = 'E Commerce Wishlist'

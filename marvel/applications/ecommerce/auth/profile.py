@@ -14,6 +14,68 @@ from django.db.utils import IntegrityError
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.generics import ListAPIView, GenericAPIView
+
+
+class GetProfileDataByUserId(ListAPIView):
+    __doc__ = """
+    GetProfileDataByUserId \n
+    
+    Vista de API personalizada para recibir peticiones de tipo GET y obtener el perfil de un usuario, dado su id \n
+    """
+    serializer_class = ProfileDataSerializer
+    permission_classes = [HasAPIKey and IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        uid = self.kwargs.get("uid")
+        user = User.objects.get(id = uid)
+        profile = Profile.objects.get(user=user)
+        return profile
+
+    def get(self, request, *args, **kwargs):
+        uid = self.kwargs.get("uid")
+        try:
+            user = User.objects.get(id = uid)
+        except Exception as e:
+            print(e)
+            return Response(status = 400, data = {"error":f"No se encontró el usuario {uid}"})
+
+        # Validar que el user id coincide con el token enviado
+        if not Token.objects.get(key = self.request.headers.get("Authorization").split(" ")[1]).user == user:
+            return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales inválidas - Token inválido"})
+        
+        return super().get(request, *args, **kwargs)
+
+
+class GetProfileDataByUsername(ListAPIView):
+    __doc__ = """
+    GetProfileDataByUsername \n
+    
+    Vista de API personalizada para recibir peticiones de tipo GET y obtener el perfil de un usuario, dado su id \n
+    """
+    permission_classes = [HasAPIKey and IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        username = self.kwargs.get("username")
+        user = User.objects.get(id = username)
+        profile = Profile.objects.get(user=user)
+        return profile
+
+    def get(self, request, *args, **kwargs):
+        username = self.kwargs.get("username")
+        try:
+            user = User.objects.get(username = username)
+        except Exception as e:
+            print(e)
+            return Response(status = 400, data = {"error":f"No se encontró el usuario {username}"})
+
+        # Validar que el user id coincide con el token enviado
+        if not Token.objects.get(key = self.request.headers.get("Authorization").split(" ")[1]).user == user:
+            return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales inválidas - Token inválido"})
+        
+        return super().get(request, *args, **kwargs)
 
 
 class UpdateProfileAPIView(APIView):

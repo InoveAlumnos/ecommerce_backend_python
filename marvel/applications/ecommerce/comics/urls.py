@@ -17,7 +17,8 @@ Including another URLconf
 """
 
 from django.urls import path
-from applications.ecommerce.comics.views import *
+from applications.ecommerce.comics.comics import *
+from applications.ecommerce.comics.wish import *
 from applications.ecommerce.comics.fetch import FetchDatabaseAPIView
 
 urlpatterns = [
@@ -33,7 +34,7 @@ urlpatterns = [
 
     # WishList API View
     path('wish/get', GetWishListAPIView.as_view()),
-    path("wish/get-by-username/<username>", GetWishListByUsernameAPIView.as_view()),
     path("wish/get-by-uid/<uid>", GetWishListByUserIDAPIView.as_view()),
     path('wish/post', PostWishListAPIView.as_view()),
+    path('wish/purchase/<uid>', PurchaseAPIView.as_view()),
 ]

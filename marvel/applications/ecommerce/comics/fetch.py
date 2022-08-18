@@ -33,25 +33,16 @@ class Fin(Exception):
 
 
 class FetchDatabaseAPIView(APIView):
-    __doc__ = f'''
-    Esta vista de API nos permite hacer un fetch de los comics de la API de marvel en nuestra database.\n
+    __doc__ = f"""
+    FetchDatabaseAPIView \n
 
-    `[METODO PATCH]`
-    Actualizar comics existentes \n
-    
-    `[METODO POST]`
-    Eliminar todos los comics y agregar otros 300 comics \n
-    '''
+    Esta vista de API nos permite hacer un fetch de los comics de la API de marvel en nuestra database.\n
+    """
 
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
-    swagger_schema = None
-
 
     def post(self, request, *args, **kwargs):
-        '''
-        Al usar el método POST, se sobrescribe la DB, se eliminan todos los comics anteriores
-        '''
         # Eliminar todos los comics anteriores
         Comic.objects.all().delete()
 
@@ -82,41 +73,6 @@ class FetchDatabaseAPIView(APIView):
 
         except Fin:
             return Response({"response": "Comics actualizados"}, status=200)
-
-
-    def patch(self, request, *args, **kwargs):
-        '''
-        Al usar el método PATCH, se agrega a la DB los comics que no están en la DB
-        '''
-        # Obtener comics
-        offset = 0
-        comics_guardados = 0
-
-        try: 
-            while True:
-                comics = self.get_comics(offset = offset)
-
-                # Guardar comics en la DB
-                for comic in comics:
-                    try:
-                        comic.save()
-                        comics_guardados += 1
-                    
-                    except Exception as e:
-                        print(e)
-                        continue
-
-                    if comics_guardados >= 300:
-                        # Lanzo una excepción para cortar abruptamente ambos bucles (while y for)
-                        raise Fin("Se guardaron 300 comics")
-                
-                offset += 20
-
-        except Fin:
-            return Response({"response": "Comics actualizados"}, status=200)
-
-        except Exception as e:
-            return Response(status = 500, data = {"error": "Internal server error"})
 
 
     def dict_to_comic(self, comic: dict = {}) -> Comic:

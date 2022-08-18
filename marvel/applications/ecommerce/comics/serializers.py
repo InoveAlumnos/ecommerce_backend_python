@@ -19,3 +19,8 @@ class WishListSerializer(serializers.ModelSerializer):
     class Meta:
         model = WishList
         fields = ('__all__')
+
+
+class WishListQuerySerializer(serializers.Serializer):
+    on_cart = serializers.IntegerField(required = False)
+    on_cart = serializers.IntegerField(required = False)
