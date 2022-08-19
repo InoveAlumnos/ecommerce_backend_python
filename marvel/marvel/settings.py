@@ -220,6 +220,7 @@ LOGGING = {
 }
 
 SWAGGER_SETTINGS = {
+    "DEFAULT_MODEL_RENDERING": "example",
     'SECURITY_DEFINITIONS': {
         'X-Api-Key': {
             'description': 'Acá tenés que poner tu **ApiKey**, sólo tenés que pegarla \n **ejemplo: x6CKJooZ.DPiPTDrEQKnTddnejNqRlx3QP3oMWGzY** ',

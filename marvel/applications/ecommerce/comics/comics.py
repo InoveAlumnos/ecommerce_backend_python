@@ -10,6 +10,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 class GetComicAPIView(ListAPIView):
     __doc__ = """
@@ -17,13 +19,13 @@ class GetComicAPIView(ListAPIView):
 
     Vista de API genérica que recibe peticiones de tipo GET y devuelve una lista de todos los comics presentes en la base de datos. \n
     
-    Se pueden enviar en URL los parámetros limit y offset. `?limit=n&offset=m` \n
+    Se pueden enviar en URL los parámetros limit y offset. **?limit=n&offset=m** \n
     """
 
     serializer_class = ComicSerializer
     permission_classes = [HasAPIKey]
     authentication_classes = []
-    
+
     def get_queryset(self):
         limit = self.request.GET.get("limit", 20)
         offset = self.request.GET.get("offset", 0)

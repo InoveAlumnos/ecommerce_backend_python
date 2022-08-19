@@ -14,6 +14,8 @@ from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 def validate_user(request, user_id):
     """
@@ -79,11 +81,11 @@ class GetWishListByUserIDAPIView(ListAPIView):
             user = User.objects.get(id = uid)
         except Exception as e:
             print(e)
-            return Response(status = 400, data = {"error":f"No se encontró el usuario {uid}"})
+            return Response(status = 400, data = {"error":"Bad request", "detail": f"No existe el usuario {uid}"})
 
         # Validar que el user id coincide con el token enviado
         if not validate_user(self.request, self.kwargs.get("uid")):
-            return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales inválidas - Token inválido"})
+            return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
         
         return super().get(request, *args, **kwargs)
 
@@ -102,26 +104,7 @@ class PostWishListAPIView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         # Validar que el username coincide con el token enviado
         if not validate_user(self.request, request.user):
-            return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales inválidas - Token inválido"})
-
-        return super().post(request, *args, **kwargs)
-
-
-class PostWishListAPIView(ListCreateAPIView):
-    __doc__ = f'''
-    PostWishListAPIView \n
-
-    Esta vista de API nos permite hacer un insert de una wishlist en la base de datos. \n
-    '''
-    queryset = WishList.objects.all()
-    serializer_class = WishListSerializer
-    permission_classes = [HasAPIKey and IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
-
-    def post(self, request, *args, **kwargs):
-        # Validar que el username coincide con el token enviado
-        if not validate_user(request, request.user):
-            return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales inválidas - Token inválido"})
+            return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
 
         return super().post(request, *args, **kwargs)
 
@@ -155,9 +138,9 @@ class PurchaseAPIView(APIView):
 
         # Validar que el user id coincide con el token enviado
         if not validate_user(request, self.kwargs.get("uid")):
-            return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales inválidas - Token inválido"})
+            return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
         
         for wish in self.get_queryset():
             wish.delete()
 
-        return Response(status = 200, data = {"message": "Wishlist eliminadas"})
+        return Response(status = 200, data = {"detail": "Wishlist eliminadas"})

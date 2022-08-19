@@ -51,7 +51,7 @@ class LoginClientAPIView(APIView):
             examples={
                 "application/json": {
                     'error': 'Bad Request',
-                    'message': 'No se enviaron los parámetros necesarios'
+                    'detail': 'No se enviaron los parámetros necesarios'
                 }
             }
         ),
@@ -61,17 +61,7 @@ class LoginClientAPIView(APIView):
             examples={
                 "application/json": {
                     'error': 'Unauthorized',
-                    'message': 'Credenciales inválidas'
-                }
-            }
-        ),
-        
-        "403": openapi.Response(
-            description='Unauthorized',
-            examples={
-                "application/json": {
-                    'error': 'Missing Permissions',
-                    'message': 'Tu usuario no tiene los permisos para realizar esta acción'
+                    'detail': 'Credenciales inválidas'
                 }
             }
         ),
@@ -81,7 +71,7 @@ class LoginClientAPIView(APIView):
             examples={
                 "application/json": {
                     'error': 'Internal Server Error',
-                    'message': 'Ocurrió un error en el servidor'
+                    'detail': 'Ocurrió un error en el servidor'
                 }
             }
         ),
@@ -111,14 +101,14 @@ class LoginClientAPIView(APIView):
                         return Response(status = 200, data = {'username': username, 'uid': user.id, 'api-key': key})
                     
                     else:
-                        return Response(status = 403, data = {"error": "Unauthorized", "message": "Tu usuario no tiene los permisos para realizar esta acción"})
+                        return Response(status = 403, data = {"error": "Unauthorized", "detail": "Tu usuario no tiene los permisos para realizar esta acción"})
 
                 else:
                     print("Autenticación fallida:", request.data)
                     # Si las credenciales son invalidas, devolvemos mensaje de error:
-                    return Response(status = 401, data = {"error": "Unauthorized", "message": "Credenciales invalidas"})
+                    return Response(status = 401, data = {"error": "Unauthorized", "detail": "Credenciales invalidas"})
 
-            return Response(status = 400, data = {"error": "Bad Request", "message": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
+            return Response(status = 400, data = {"error": "Bad Request", "detail": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
         except Exception as e:
             print(e)
@@ -164,7 +154,7 @@ class LoginUserAPIView(APIView):
             examples={
                 "application/json": {
                     'error': 'Bad Request',
-                    'message': 'No se enviaron los parámetros necesarios'
+                    'detail': 'No se enviaron los parámetros necesarios'
                 }
             }
         ),
@@ -174,7 +164,7 @@ class LoginUserAPIView(APIView):
             examples={
                 "application/json": {
                     'error': 'Unauthorized',
-                    'message': 'Credenciales inválidas'
+                    'detail': 'Credenciales inválidas'
                 }
             }
         ),
@@ -183,6 +173,7 @@ class LoginUserAPIView(APIView):
             description='Forbidden - Falta API Key',
             examples={
                 "application/json": {
+                    'error': 'Forbidden',
                     'detail': 'Usted no tiene permiso para realizar esta acción.'
                 }
             }
@@ -193,7 +184,7 @@ class LoginUserAPIView(APIView):
             examples={
                 "application/json": {
                     'error': 'Internal Server Error',
-                    'message': 'Ocurrió un error en el servidor'
+                    'detail': 'Ocurrió un error en el servidor'
                 }
             }
         ),
@@ -230,10 +221,10 @@ class LoginUserAPIView(APIView):
                 else:
                     print("Autenticación fallida:", request.data)
                     # Si las credenciales son invalidas, devolvemos mensaje de error:
-                    return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales invalidas"})
+                    return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales invalidas"})
 
-            return Response(status = 400, data = {"error": "Bad Request", "message": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
+            return Response(status = 400, data = {"error": "Bad Request", "detail": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
         except Exception as e:
             print(e)
-            return Response(status = 500, data = {"error": "Internal server error", "description": e})
+            return Response(status = 500, data = {"error": "Internal server error"})

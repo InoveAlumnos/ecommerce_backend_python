@@ -53,14 +53,20 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    # Redirecciones
     path('', lambda request: redirect('/ecommerce/', permanent=True)),
     path('/', lambda request: redirect('/ecommerce/', permanent=True)),
+    path('api-docs/', lambda request: redirect("/api-docs/swagger", permanent=True)),
+    
+    # Administrador de db
     path('admin/', admin.site.urls),
+
+    # ecommerce
     path('ecommerce/', include('applications.ecommerce.urls')),
     path('ecommerce/', include('applications.ecommerce.auth.urls')),
     path('ecommerce/', include('applications.ecommerce.comics.urls')),
 
-    path('api-docs/', lambda request: redirect("/api-docs/swagger", permanent=True)),
+    # api-docs
     path('api-docs/swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api-docs/redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
 ]

@@ -55,26 +55,17 @@ class SignUpClientAPIView(APIView):
             examples={
                 "application/json": {
                     'error': 'Bad Request',
-                    'message': 'No se enviaron los parámetros necesarios'
+                    'detail': 'No se enviaron los parámetros necesarios'
                 }
             }
         ),
         
-        "403": openapi.Response(
-            description='Unavailable',
-            examples={
-                "application/json": {
-                    'error': 'Unavailable',
-                    'message': 'El nombre de usuario no está disponible'
-                }
-            }
-        ),
         "500": openapi.Response(
             description='Internal Server Error',
             examples={
                 "application/json": {
                     'error': 'Internal Server Error',
-                    'message': 'Ocurrió un error en el servidor'
+                    'detail': 'Ocurrió un error en el servidor'
                 }
             }
         ),
@@ -92,7 +83,7 @@ class SignUpClientAPIView(APIView):
                     ClientGroup().agregar_usuario(user)
 
                 except IntegrityError:
-                    return Response(status = 400, data = {"error": "Unavailable", "message": f"El nombre de usuario {request.data['username']} no está disponible"})
+                    return Response(status = 400, data = {"error": "Unavailable", "detail": f"El nombre de usuario {request.data['username']} no está disponible"})
 
                 except Exception as e:                    
                     return Response(status = 500, data = {"error": "Internal server error", "description": e})
@@ -101,7 +92,7 @@ class SignUpClientAPIView(APIView):
                 user_data.update(serializer.data)
                 return Response(status = 200, data = user_data)
             
-            return Response(status = 400, data = {"error": "Bad Request", "message": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
+            return Response(status = 400, data = {"error": "Bad Request", "detail": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
         except Exception as e:
             return Response(status = 500, data = {"error": "Internal server error", "description": e})
@@ -151,7 +142,7 @@ class SignUpUserAPIView(APIView):
             examples={
                 "application/json": {
                     'error': 'Bad Request',
-                    'message': 'No se enviaron los parámetros necesarios'
+                    'detail': 'No se enviaron los parámetros necesarios'
                 }
             }
         ),
@@ -161,7 +152,7 @@ class SignUpUserAPIView(APIView):
             examples={
                 "application/json": {
                     'error': 'Unavailable',
-                    'message': 'El nombre de usuario no está disponible'
+                    'detail': 'El nombre de usuario no está disponible'
                 }
             }
         ),
@@ -171,7 +162,7 @@ class SignUpUserAPIView(APIView):
             examples={
                 "application/json": {
                     'error': 'Internal Server Error',
-                    'message': 'Ocurrió un error en el servidor'
+                    'detail': 'Ocurrió un error en el servidor'
                 }
             }
         ),
@@ -190,11 +181,11 @@ class SignUpUserAPIView(APIView):
 
                 except IntegrityError as ie:
                     print(ie)
-                    return Response(status = 403, data = {"error": "unavailable", "message": f"El nombre de usuario {request.data['username']} no está disponible"})
+                    return Response(status = 403, data = {"error": "unavailable", "detail": f"El nombre de usuario {request.data['username']} no está disponible"})
 
                 except Exception as e:
                     print(e)                    
-                    return Response(status = 500, data = {"error": "Internal server error", "message": "Ocurrió un error en el servidor"})
+                    return Response(status = 500, data = {"error": "Internal server error", "detail": "Ocurrió un error en el servidor"})
                 
                 # NOTE: Creo perfil usando un filtrado del request, en caso de que luego se agreguen mas campos, va a ser mas facil
                 profile = Profile(user = user, **{key: dict(request.data).get(key, "Desconocido")
@@ -205,8 +196,8 @@ class SignUpUserAPIView(APIView):
                 user_data.update(serializer.data)
                 return Response(status = 200, data = user_data)
 
-            return Response(status = 400, data = {"error": "Bad Request", "message": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
+            return Response(status = 400, data = {"error": "Bad Request", "detail": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
         except Exception as e:
             print(e)
-            return Response(status = 500, data = {"error": "Internal server error", "message": "Ocurrió un error en el servidor"})
+            return Response(status = 500, data = {"error": "Internal server error", "detail": "Ocurrió un error en el servidor"})

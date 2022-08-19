@@ -39,11 +39,11 @@ class GetProfileDataByUserId(ListAPIView):
             user = User.objects.get(id = uid)
         except Exception as e:
             print(e)
-            return Response(status = 400, data = {"error":f"No se encontró el usuario {uid}"})
+            return Response(status = 400, data = {"error": "Bad request", "detail": f"No se encontró el usuario {uid}"})
 
         # Validar que el user id coincide con el token enviado
         if not Token.objects.get(key = self.request.headers.get("Authorization").split(" ")[1]).user == user:
-            return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales inválidas - Token inválido"})
+            return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
         
         return super().get(request, *args, **kwargs)
 
@@ -69,11 +69,11 @@ class GetProfileDataByUsername(ListAPIView):
             user = User.objects.get(username = username)
         except Exception as e:
             print(e)
-            return Response(status = 400, data = {"error":f"No se encontró el usuario {username}"})
+            return Response(status = 400, data = {"error": "Bad request", "detail": f"No se encontró el usuario {username}"})
 
         # Validar que el user id coincide con el token enviado
         if not Token.objects.get(key = self.request.headers.get("Authorization").split(" ")[1]).user == user:
-            return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales inválidas - Token inválido"})
+            return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
         
         return super().get(request, *args, **kwargs)
 
@@ -114,7 +114,7 @@ class UpdateProfileAPIView(APIView):
                 description='Perfil actualizado correctamente',
                 examples = {
                     "application/json": {
-                        "message": "Perfil actualizado correctamente",
+                        "detail": "Perfil actualizado correctamente",
                     }
                 }
             ),
@@ -124,7 +124,7 @@ class UpdateProfileAPIView(APIView):
                 examples={
                     "application/json": {
                         'error': 'Bad Request',
-                        'message': 'No se enviaron los parámetros necesarios o el usuario no existe'
+                        'detail': 'No se enviaron los parámetros necesarios o el usuario no existe'
                     }
                 }
             ),
@@ -134,7 +134,17 @@ class UpdateProfileAPIView(APIView):
                 examples={
                     "application/json": {
                         'error': 'Unauthorized',
-                        'message': 'Credenciales inválidas'
+                        'detail': 'Credenciales inválidas'
+                    }
+                }
+            ),
+
+            "403": openapi.Response(
+                description='Forbidden',
+                examples={
+                    "application/json": {
+                        'error': 'Forbidden',
+                        'detail': 'Usted no tiene permiso para realizar esta acción.'
                     }
                 }
             ),
@@ -144,7 +154,7 @@ class UpdateProfileAPIView(APIView):
                 examples={
                     "application/json": {
                         'error': 'Internal Server Error',
-                        'message': 'Ocurrió un error en el servidor'
+                        'detail': 'Ocurrió un error en el servidor'
                     }
                 }
             ),
@@ -157,11 +167,11 @@ class UpdateProfileAPIView(APIView):
 
             # Validar que el username coincide con el token enviado            
             if not Token.objects.get(key = request.headers.get("Authorization").split(" ")[1]).user == consumer:
-                return Response(status=401, data = {"error": "Unauthorized", "message": "Credenciales inválidas - Token inválido"})
+                return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
 
         except Exception as e:
             print(e)
-            return Response(status=500, data = {"error": "Internal server error", "description": e})
+            return Response(status=500, data = {"error": "Internal server error", "detail": e})
 
         try:
             profile = Profile.objects.get(user = consumer)
@@ -172,7 +182,7 @@ class UpdateProfileAPIView(APIView):
 
         except Exception as e:
             print(e)
-            return Response(status = 500, data = {"error": "Internal server error", "description": e})
+            return Response(status = 500, data = {"error": "Internal server error", "detail": e})
 
         try:
             # Actualizar perfil
@@ -181,6 +191,6 @@ class UpdateProfileAPIView(APIView):
         
         except Exception as e:
             print(e)
-            return Response(status = 500, data = {"error": "Internal server error", "description": e})
+            return Response(status = 500, data = {"error": "Internal server error", "detail": e})
         
-        return Response(status = 200, data = {"message": "Perfil actualizado correctamente"})
+        return Response(status = 200, data = {"detail": "Perfil actualizado correctamente"})

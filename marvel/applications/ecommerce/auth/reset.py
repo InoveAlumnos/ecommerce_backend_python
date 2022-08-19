@@ -57,7 +57,16 @@ class ResetPasswordView(APIView):
             examples={
                 "application/json": {
                     'error': 'Bad Request',
-                    'message': 'No se enviaron los parámetros necesarios'
+                    'detail': 'No se enviaron los parámetros necesarios'
+                }
+            }
+        ),
+
+        "403": openapi.Response(
+            description='Forbidden',
+            examples={
+                "application/json": {
+                    'detail': 'Usted no tiene permiso para realizar esta acción.'
                 }
             }
         ),
@@ -67,7 +76,7 @@ class ResetPasswordView(APIView):
             examples={
                 "application/json": {
                     'error': 'Internal Server Error',
-                    'message': 'Ocurrió un error en el servidor'
+                    'detail': 'Ocurrió un error en el servidor'
                 }
             }
         ),
@@ -99,4 +108,4 @@ class ResetPasswordView(APIView):
             
             return Response({"old_password": ["Wrong password."]}, status = 401)
 
-        return Response(status = 400, data = {"Error": "Bad Request", "error_message": f"{serializer.errors}"})
+        return Response(status = 400, data = {"Error": "Bad Request", "detail": f"{serializer.errors}"})
