@@ -13,6 +13,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 # TODO: Mover estas keys a variables de entorno
 PUBLIC_KEY = '58ee40376f7c10e99f440f5e3abd2caa'
@@ -36,11 +38,15 @@ class FetchDatabaseAPIView(APIView):
     __doc__ = f"""
     FetchDatabaseAPIView \n
 
+    **Vista de API para administradores** \n
+
     Esta vista de API nos permite hacer un fetch de los comics de la API de marvel en nuestra database.\n
     """
 
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
+
+    @swagger_auto_schema(tags = ["Administrador"])
 
     def post(self, request, *args, **kwargs):
         # Eliminar todos los comics anteriores

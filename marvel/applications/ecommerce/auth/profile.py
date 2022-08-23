@@ -33,6 +33,8 @@ class GetProfileDataByUserId(ListAPIView):
         profile = Profile.objects.get(user=user)
         return profile
 
+    @swagger_auto_schema(tags = ["Autenticación y manejo de usuarios"])
+
     def get(self, request, *args, **kwargs):
         uid = self.kwargs.get("uid")
         try:
@@ -63,6 +65,7 @@ class GetProfileDataByUsername(ListAPIView):
         profile = Profile.objects.get(user=user)
         return profile
 
+    @swagger_auto_schema(tags = ["Autenticación y manejo de usuarios"])
     def get(self, request, *args, **kwargs):
         username = self.kwargs.get("username")
         try:
@@ -97,6 +100,7 @@ class UpdateProfileAPIView(APIView):
 
 
     @swagger_auto_schema(
+    tags = ["Autenticación y manejo de usuarios"],
     request_body = openapi.Schema(
             type=openapi.TYPE_OBJECT, 
             properties = {

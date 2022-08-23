@@ -29,6 +29,8 @@ class GetWishListAPIView(ListAPIView):
     __doc__ = """
     GetWishListAPIView \n
 
+    **Vista de API para administradores** \n
+
     Vista de API genérica que recibe peticiones de tipo GET para obtener una lista de todas las wishlists presentes en la base de datos. \n
 
     **Importante: el método post sólo puede ser utilizado por administradores de la aplicación.** \n
@@ -38,10 +40,23 @@ class GetWishListAPIView(ListAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
+    @swagger_auto_schema(tags = ["Administrador"])
+
+    def get(self, requests, *args, **kwargs):
+        return super().get(requests, *args, **kwargs)
+
 
 class GetWishListByUserIDAPIView(ListAPIView):
     __doc__ = """
-    Vista de API genérica que devuelve una lista de todas las wishlists de un usuario.
+    GetWishListByUserIDAPIView \n
+
+    Vista de API genérica que devuelve una lista de todas las wishlists de un usuario. \n
+
+    Es posible solicitar wishlists que estén en carrito y/o favoritos, enviando los valores por url de la siguiente forma:
+    **?cart=true&favorite=true** \n
+
+    _Nota: los posibles valores son **true** y **false**, y son independientes entre ellos, cualquiera de los dos puede ser **true** o **false** según
+    lo que se necesite_
 
     Para usar este endpoint, es necesario enviar la api-key en el header en el campo **X-Api-Key** y el token del usuario
     a actualizar en el campo **Authorization**.\n
@@ -75,6 +90,8 @@ class GetWishListByUserIDAPIView(ListAPIView):
 
         return wish
 
+    @swagger_auto_schema(tags = ["Comics y Wishlists"])
+
     def get(self, request, *args, **kwargs):
         uid = self.kwargs.get("uid")
         try:
@@ -100,6 +117,8 @@ class PostWishListAPIView(CreateAPIView):
     serializer_class = WishListSerializer
     permission_classes = [HasAPIKey and IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+
+    @swagger_auto_schema(tags = ["Comics y Wishlists"])
 
     def post(self, request, *args, **kwargs):
         # Validar que el username coincide con el token enviado
@@ -127,6 +146,8 @@ class PurchaseAPIView(APIView):
         user = User.objects.get(id = uid)
 
         return WishList.objects.filter(user=user)
+
+    @swagger_auto_schema(tags = ["Comics y Wishlists"])
 
     def delete(self, request, *args, **kwargs):
         uid = self.kwargs.get("uid")

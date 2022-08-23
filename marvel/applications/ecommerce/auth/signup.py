@@ -26,6 +26,7 @@ class SignUpClientAPIView(APIView):
     permission_classes = []
 
     @swagger_auto_schema(
+    tags = ["Autenticación y manejo de usuarios"],
     request_body = openapi.Schema(
             type=openapi.TYPE_OBJECT, 
             properties = {
@@ -113,6 +114,7 @@ class SignUpUserAPIView(APIView):
     permission_classes = [HasAPIKey]
 
     @swagger_auto_schema(
+    tags = ["Autenticación y manejo de usuarios"],
     request_body = openapi.Schema(
         type=openapi.TYPE_OBJECT, 
         properties = {

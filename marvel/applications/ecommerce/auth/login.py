@@ -28,6 +28,7 @@ class LoginClientAPIView(APIView):
 
 
     @swagger_auto_schema(
+    tags = ["Autenticación y manejo de usuarios"],
     request_body = openapi.Schema(
             type=openapi.TYPE_OBJECT, 
             properties = {
@@ -131,6 +132,7 @@ class LoginUserAPIView(APIView):
 
 
     @swagger_auto_schema(
+    tags = ["Autenticación y manejo de usuarios"],
     request_body = openapi.Schema(
             type=openapi.TYPE_OBJECT, 
             properties = {

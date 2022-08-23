@@ -33,10 +33,17 @@ class GetComicAPIView(ListAPIView):
             return Comic.objects.all()[int(offset):int(limit)]
         return Comic.objects.all()
 
+    @swagger_auto_schema(tags = ["Comics y Wishlists"])
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    
 
 class PostComicAPIView(CreateAPIView):
     __doc__ = """
     PostComicAPIView \n
+
+    **Vista de API para administradores** \n
 
     Vista de API genérica que recibe peticiones de tipo POST para hacer un insert en la base de datos. \n
     """
@@ -46,10 +53,17 @@ class PostComicAPIView(CreateAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
+    @swagger_auto_schema(tags = ["Administrador"])
+
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
   
 class ListCreateComicAPIView(ListCreateAPIView):
     __doc__ = """
     ListCreateComicAPIView \n
+
+    **Vista de API para administradores** \n
 
     Vista de API genérica que recibe de peticiones GET y POST. \n
 
@@ -64,10 +78,21 @@ class ListCreateComicAPIView(ListCreateAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
+    @swagger_auto_schema(tags = ["Administrador"])
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags = ["Administrador"])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
 
 class RetrieveUpdateComicAPIView(RetrieveUpdateAPIView):
     __doc__ = """
     RetrieveUpdateComicAPIView \n
+
+    **Vista de API para administradores** \n
 
     Vista de API genérica que recibe peticiones de tipo GET, PUT y PATCH. Permite actualizar un registro u obtenerlo. \n
     """
@@ -75,11 +100,24 @@ class RetrieveUpdateComicAPIView(RetrieveUpdateAPIView):
     serializer_class = ComicSerializer
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
+    
+    @swagger_auto_schema(tags = ["Administrador"])
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
 
+    @swagger_auto_schema(tags = ["Administrador"])
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags = ["Administrador"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 class DestroyComicAPIView(DestroyAPIView):
     __doc__ = """
     DestroyComicAPIView \n
+
+    **Vista de API para administradores** \n
 
     Vista de API genérica que permite eliminar comics de la base de datos. \n
     """
@@ -87,3 +125,8 @@ class DestroyComicAPIView(DestroyAPIView):
     serializer_class = ComicSerializer
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
+
+    @swagger_auto_schema(tags = ["Administrador"])
+
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
