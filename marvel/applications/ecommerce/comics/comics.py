@@ -4,6 +4,7 @@
 APIs genéricas para realizar un CRUD a la base de datos - Tabla Comic
 '''
 
+import re
 from applications.ecommerce.models import Comic
 from applications.ecommerce.comics.serializers import *
 from rest_framework.permissions import IsAdminUser
@@ -12,6 +13,64 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+
+comic_responses = {
+    "200": openapi.Response(
+        description='Operación exitosa',
+        examples = {
+            "application/json": {
+                "id": 0,
+                "marvel_id": 10,
+                "title": "string",
+                "description": "string",
+                "price": 0,
+                "stock_qty": 10,
+                "picture": "string",
+                "stars": 5
+            }
+        }
+    ),
+
+    "400": openapi.Response(
+        description='Bad Request - Faltan parámetros en el request',
+        examples={
+            "application/json": {
+                'error': 'Bad Request',
+                'detail': 'No se enviaron los parámetros necesarios'
+            }
+        }
+    ),
+
+    "401": openapi.Response(
+        description='Unauthorized - No matchean usuario y contraseña',
+        examples={
+            "application/json": {
+                'error': 'Unauthorized',
+                'detail': 'Credenciales inválidas'
+            }
+        }
+    ),
+
+    "403": openapi.Response(
+        description='Forbidden - Falta API Key',
+        examples={
+            "application/json": {
+                'error': 'Forbidden',
+                'detail': 'Usted no tiene permiso para realizar esta acción.'
+            }
+        }
+    ),
+    
+    "500": openapi.Response(
+        description='Internal Server Error',
+        examples={
+            "application/json": {
+                'error': 'Internal Server Error',
+                'detail': 'Ocurrió un error en el servidor'
+            }
+        }
+    ),
+}
 
 class GetComicAPIView(ListAPIView):
     __doc__ = """
@@ -33,7 +92,7 @@ class GetComicAPIView(ListAPIView):
             return Comic.objects.all()[int(offset):int(limit)]
         return Comic.objects.all()
 
-    @swagger_auto_schema(tags = ["Comics y Wishlists"])
+    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = comic_responses)
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -53,7 +112,7 @@ class PostComicAPIView(CreateAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
-    @swagger_auto_schema(tags = ["Administrador"])
+    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses) 
 
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
@@ -78,7 +137,7 @@ class ListCreateComicAPIView(ListCreateAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
-    @swagger_auto_schema(tags = ["Administrador"])
+    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses)
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -101,15 +160,15 @@ class RetrieveUpdateComicAPIView(RetrieveUpdateAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
     
-    @swagger_auto_schema(tags = ["Administrador"])
+    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses)
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags = ["Administrador"])
+    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses)
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags = ["Administrador"])
+    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -126,7 +185,7 @@ class DestroyComicAPIView(DestroyAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
-    @swagger_auto_schema(tags = ["Administrador"])
+    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses)
 
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)

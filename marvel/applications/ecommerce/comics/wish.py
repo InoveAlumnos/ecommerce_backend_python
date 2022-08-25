@@ -13,15 +13,73 @@ from rest_framework.authtoken.models import Token
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+
+wish_responses = {
+    "200": openapi.Response(
+        description='Operación exitosa',
+        examples = {
+            "id": 1,
+            "user": 1,
+            "comic": 1,
+            "favorite": "true",
+            "cart": "true",
+            "on_cart_qty": 10
+        }
+    ),
+
+    "400": openapi.Response(
+        description='Bad Request - Faltan parámetros en el request',
+        examples={
+            "application/json": {
+                'error': 'Bad Request',
+                'detail': 'No se enviaron los parámetros necesarios'
+            }
+        }
+    ),
+
+    "401": openapi.Response(
+        description='Unauthorized - No matchean usuario y contraseña',
+        examples={
+            "application/json": {
+                'error': 'Unauthorized',
+                'detail': 'Credenciales inválidas'
+            }
+        }
+    ),
+
+    "403": openapi.Response(
+        description='Forbidden - Falta API Key',
+        examples={
+            "application/json": {
+                'error': 'Forbidden',
+                'detail': 'Usted no tiene permiso para realizar esta acción.'
+            }
+        }
+    ),
+    
+    "500": openapi.Response(
+        description='Internal Server Error',
+        examples={
+            "application/json": {
+                'error': 'Internal Server Error',
+                'detail': 'Ocurrió un error en el servidor'
+            }
+        }
+    ),
+}
 
 def validate_user(request, user_id):
     """
     Función que se utiliza para validar que el token recibido pertenece al usuario al que se está queriendo acceder
     """
-    user = User.objects.get(id=user_id)
+    try:
+        user = User.objects.get(id=user_id)
+    except:
+        return None
+
     return Token.objects.get(key = request.headers.get("Authorization").split(" ")[1]).user == user
 
 
@@ -40,7 +98,7 @@ class GetWishListAPIView(ListAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
-    @swagger_auto_schema(tags = ["Administrador"])
+    @swagger_auto_schema(tags = ["Administrador"], responses = wish_responses)
 
     def get(self, requests, *args, **kwargs):
         return super().get(requests, *args, **kwargs)
@@ -90,12 +148,13 @@ class GetWishListByUserIDAPIView(ListAPIView):
 
         return wish
 
-    @swagger_auto_schema(tags = ["Comics y Wishlists"])
+    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses)
 
     def get(self, request, *args, **kwargs):
         uid = self.kwargs.get("uid")
+        
         try:
-            user = User.objects.get(id = uid)
+            User.objects.get(id = uid)
         except Exception as e:
             print(e)
             return Response(status = 400, data = {"error":"Bad request", "detail": f"No existe el usuario {uid}"})
@@ -118,7 +177,7 @@ class PostWishListAPIView(CreateAPIView):
     permission_classes = [HasAPIKey and IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    @swagger_auto_schema(tags = ["Comics y Wishlists"])
+    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses)
 
     def post(self, request, *args, **kwargs):
         # Validar que el username coincide con el token enviado
@@ -128,11 +187,41 @@ class PostWishListAPIView(CreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
+class UpdateWishListAPIView(UpdateAPIView):
+    __doc__ = f"""
+    RetrieveWishListAPIView \n
+    
+    Vista de API genérica para actualizar una wishlist vía peticiones de tipo **PATCH**. \n
+    """
+
+    queryset = WishList.objects.all()
+    serializer_class = WishListSerializer
+    permission_classes = [HasAPIKey and IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        return WishList.objects.filter(id=self.kwargs.get("pk"))
+
+    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses)
+
+    def patch(self, request, *args, **kwargs):
+        # Validar que el username coincide con el token enviado
+        if not validate_user(self.request, request.user):
+            return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
+
+        return super().patch(request, *args, **kwargs)
+
+    # No admitir requests de tipo put
+    @swagger_auto_schema(auto_schema = None)
+    def put(self, request, *args, **kwargs):
+        return Response(status=405, data = {"error": "Method not allowed", "detail": "No se permite el uso de este método"})
+
+
 class PurchaseAPIView(APIView):
     __doc__ = f"""
     PurchaseAPIView \n
 
-    Vista de API para personalizada eliminar las wishlists de un usuario luego de que el mismo realice una compra \n
+    Vista de API personalizada eliminar las wishlists de un usuario luego de que el mismo realice una compra \n
 
     Para usar este endpoint, es necesario enviar la api-key en el header en el campo **X-Api-Key** y el token del usuario 
     en el campo **Authorization**.\n
@@ -147,7 +236,7 @@ class PurchaseAPIView(APIView):
 
         return WishList.objects.filter(user=user)
 
-    @swagger_auto_schema(tags = ["Comics y Wishlists"])
+    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses)
 
     def delete(self, request, *args, **kwargs):
         uid = self.kwargs.get("uid")
