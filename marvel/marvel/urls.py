@@ -14,22 +14,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+import json
 from django.contrib import admin
 from django.urls import path, include
+from django.shortcuts import redirect
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from rest_framework import permissions
-from django.shortcuts import redirect
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework_api_key.permissions import HasAPIKey
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
-
 
 # Docs description - Swagger - OpenAPI
-description = '''
+description = f""""
 <img src="https://lh3.googleusercontent.com/pw/AM-JKLWLct73ne_PgqQ146YMYjUgbswqg703xPZPnVImkFYwGbao5YksFGJFOlcoCJLfqIJ9_LRwFAwP9qinoEvsLx92NTOfAn54SgMLTgMvtii0r_rjneGjR53bx08OCncv4mRH4gNnpmEUuKofj59L9dAv=w1257-h103-no?authuser=0">
-<h2>Documentación general de APIs de la aplicación ecommerce</h2>
-'''
+<h2> Documentación general de APIs de la aplicación ecommerce</h2>
+<h4> Para utilizar los endpoints que requieren de autenticación, clickear sobre el botón **Authorize**, e ingresar la API Key y/o el Token de usuario, recordar que tienen este formato: </h4>
+```
+{json.dumps({'X-Api-Key': '<API_KEY>', 'Authorization': 'Token <TOKEN>'}, indent=4)}
+```
+<br>
+<h5> Lo que ustedes tienen que hacer es colocar en el campo **Value** de **X-Api-Key** el valor de su apikey (<API_KEY>) y en el campo **Value** de **Authorization** el valor de su token de usuario, usando el prefijo "Token" (Token <TOKEN\>).
+</h5>
+<br>
+"""
 
 schema_view = get_schema_view(
     openapi.Info(
