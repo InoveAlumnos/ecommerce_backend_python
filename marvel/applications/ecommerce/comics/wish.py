@@ -13,7 +13,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
@@ -40,18 +40,8 @@ wish_responses = {
         }
     ),
 
-    "401": openapi.Response(
-        description='Unauthorized - No matchean usuario y contraseña',
-        examples={
-            "application/json": {
-                'error': 'Unauthorized',
-                'detail': 'Credenciales inválidas'
-            }
-        }
-    ),
-
     "403": openapi.Response(
-        description='Forbidden - Falta API Key',
+        description='Forbidden',
         examples={
             "application/json": {
                 'error': 'Forbidden',
@@ -152,7 +142,7 @@ class GetWishListByUserIDAPIView(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         uid = self.kwargs.get("uid")
-        
+
         try:
             User.objects.get(id = uid)
         except Exception as e:
@@ -171,6 +161,9 @@ class PostWishListAPIView(CreateAPIView):
     PostWishListAPIView \n
 
     Esta vista de API nos permite hacer un insert de una wishlist en la base de datos. \n
+
+    Para usar este endpoint, es necesario enviar la api-key en el header en el campo **X-Api-Key** y el token del usuario
+    a dueño de la wishlist en el campo **Authorization**.\n
     '''
     queryset = WishList.objects.all()
     serializer_class = WishListSerializer
@@ -192,6 +185,9 @@ class UpdateWishListAPIView(UpdateAPIView):
     RetrieveWishListAPIView \n
     
     Vista de API genérica para actualizar una wishlist vía peticiones de tipo **PATCH**. \n
+    
+    Para usar este endpoint, es necesario enviar la api-key en el header en el campo **X-Api-Key** y el token del usuario
+    a dueño e la wishlist a actualizar en el campo **Authorization**.\n
     """
 
     queryset = WishList.objects.all()
@@ -215,6 +211,31 @@ class UpdateWishListAPIView(UpdateAPIView):
     @swagger_auto_schema(auto_schema = None)
     def put(self, request, *args, **kwargs):
         return Response(status=405, data = {"error": "Method not allowed", "detail": "No se permite el uso de este método"})
+
+
+class DeleteWishListAPIView(DestroyAPIView):
+    __doc__ = f"""
+    DeleteWishListAPIView \n
+
+    Vista de API genérica para eliminar una wishlist vía peticiones de tipo **DELETE**. \n
+
+    Para usar este endpoint, es necesario enviar la api-key en el header en el campo **X-Api-Key** y el token del usuario
+    dueño de la wishlist a eliminar en el campo **Authorization**.\n
+    """
+
+    queryset = WishList.objects.all()
+    serializer_class = WishListSerializer
+    permission_classes = [HasAPIKey and IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses)
+
+    def delete(self, request, *args, **kwargs):
+        # Validar que el username coincide con el token enviado
+        if not validate_user(self.request, request.user):
+            return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
+
+        return super().delete(request, *args, **kwargs)
 
 
 class PurchaseAPIView(APIView):

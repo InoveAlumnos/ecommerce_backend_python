@@ -34,8 +34,9 @@ urlpatterns = [
 
     # WishList API View
     path('wish/get', GetWishListAPIView.as_view()),
-    path("wish/get-by-uid/<uid>", GetWishListByUserIDAPIView.as_view()),
     path('wish/post', PostWishListAPIView.as_view()),
-    path('wish/<pk>/update', UpdateWishListAPIView.as_view()),
+    path("wish/get-by-uid/<uid>", GetWishListByUserIDAPIView.as_view()),
     path('wish/purchase-user-wishlists/<uid>', PurchaseAPIView.as_view()),
+    path('wish/<pk>/update', UpdateWishListAPIView.as_view()),
+    path('wish/<pk>/delete', DeleteWishListAPIView.as_view()),
 ]

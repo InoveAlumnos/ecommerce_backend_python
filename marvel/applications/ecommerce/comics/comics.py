@@ -41,18 +41,8 @@ comic_responses = {
         }
     ),
 
-    "401": openapi.Response(
-        description='Unauthorized - No matchean usuario y contraseña',
-        examples={
-            "application/json": {
-                'error': 'Unauthorized',
-                'detail': 'Credenciales inválidas'
-            }
-        }
-    ),
-
     "403": openapi.Response(
-        description='Forbidden - Falta API Key',
+        description='Forbidden',
         examples={
             "application/json": {
                 'error': 'Forbidden',
