@@ -182,7 +182,7 @@ class PostWishListAPIView(CreateAPIView):
 
 class UpdateWishListAPIView(UpdateAPIView):
     __doc__ = f"""
-    RetrieveWishListAPIView \n
+    UpdateWishListAPIView \n
     
     Vista de API genérica para actualizar una wishlist vía peticiones de tipo **PATCH**. \n
     
