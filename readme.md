@@ -11,7 +11,7 @@ Esta aplicación fue creada para poder consumir el backend del ecommmerce de mar
 ---
 
 ## **Documentación de la API** 📚
-La API se encuentra documentada en [Postman](https://www.postman.com/juliansalinas/workspace/marvel-ecommerce-backend/api/46a815aa-0b59-46d4-8745-3f44b8331cc2) 
+Se puede acceder a la documentación de la API en el endpoint [`/api-docs/swagger`](https://inove-marvel-backend.herokuapp.com/api-docs/swagger) para **swagger-ui**, o también [`/api-docs/redoc`](https://inove-marvel-backend.herokuapp.com/api-docs/redoc) para **redoc**.
 
 --- 
 
