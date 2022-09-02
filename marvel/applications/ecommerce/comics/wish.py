@@ -138,7 +138,15 @@ class GetWishListByUserIDAPIView(ListAPIView):
 
         return wish
 
-    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses)
+    cart = openapi.Parameter('cart', openapi.IN_QUERY,
+                        description="Traer wishlist con la condición de que esté en carrito (true o false)",
+                        type=openapi.TYPE_BOOLEAN)
+
+    favorite = openapi.Parameter('favorite', openapi.IN_QUERY,
+                description="Traer wishlist con la condición de que esté en favorito (true o false)",
+                type=openapi.TYPE_BOOLEAN)
+
+    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses, manual_parameters=[cart, favorite])
 
     def get(self, request, *args, **kwargs):
         uid = self.kwargs.get("uid")

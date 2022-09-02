@@ -82,7 +82,15 @@ class GetComicAPIView(ListAPIView):
             return Comic.objects.all()[int(offset):int(limit)]
         return Comic.objects.all()
 
-    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = comic_responses)
+    limit = openapi.Parameter('limit', openapi.IN_QUERY,
+                        description="Límite de resultados a mostrar",
+                        type=openapi.TYPE_INTEGER)
+
+    offset = openapi.Parameter('offset', openapi.IN_QUERY,
+                description="Número de resultados a omitir",
+                type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = comic_responses, manual_parameters = [limit, offset])
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
