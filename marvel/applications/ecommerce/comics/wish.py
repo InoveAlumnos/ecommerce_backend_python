@@ -245,7 +245,8 @@ class DeleteWishListAPIView(DestroyAPIView):
             print(e)
             return Response(status=400, data = {"error": "Bad request", "detail": "No existe la wishlist a eliminar"})
 
-        return super().delete(request, *args, **kwargs)
+        if super().delete(request, *args, **kwargs).status_code == 204:
+            return Response(status=204, data = {"detail": "Wishlist eliminada correctamente"})
 
 
 class PurchaseAPIView(APIView):
@@ -267,7 +268,12 @@ class PurchaseAPIView(APIView):
 
         return WishList.objects.filter(user=user)
 
-    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses)
+    del_responses = {
+        204: openapi.Response(description = "Wishlists eliminadas correctamente")
+    }
+    del_responses.update(wish_responses)
+
+    @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = del_responses)
 
     def delete(self, request, *args, **kwargs):
         uid = self.kwargs.get("uid")
