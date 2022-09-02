@@ -98,7 +98,11 @@ class LoginClientAPIView(APIView):
 
                         # Crear una apikey para el usuario.
                         _, key = APIKey.objects.create_key(name = username)
-                        user = User.objects.get(username = username)
+                        try:
+                            user = User.objects.get(username = username)
+                        except Exception as e:
+                            return Response(status = 500, data = {'error': 'Internal Server Error', 'detail': 'Ocurrió un error en el servidor'})
+
                         return Response(status = 200, data = {'username': username, 'uid': user.id, 'api-key': key})
                     
                     else:
@@ -208,8 +212,13 @@ class LoginUserAPIView(APIView):
                 if account:
 
                     try:
-                        token = Token.objects.get(user=account)
                         user = User.objects.get(username = username)
+                    except Exception as e:
+                        print(e)
+                        return Response(status = 500, data = {"error": "Internal server error", "description": e})
+
+                    try:
+                        token = Token.objects.get(user=account)
 
                     except Token.DoesNotExist:
                         # En caso de token inexistente, lo creamos
