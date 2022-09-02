@@ -153,11 +153,7 @@ class GetWishListByUserIDAPIView(ListAPIView):
         if not validate_user(self.request, self.kwargs.get("uid")):
             return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
         
-        wishlists = self.get_queryset() 
-        wishlists_list = [self.serializer_class(wishlist).data for wishlist in wishlists]
-        [x.update("comic", x.comic.id) for x in wishlists_list]
-        return Response(status = 200, data = wishlists_list)
-        # return super().get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
 
 class PostWishListAPIView(CreateAPIView):
@@ -240,10 +236,14 @@ class DeleteWishListAPIView(DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         # Validar que el username coincide con el token enviado
-        uid = self.request.data.get("user")
-        print("Validando", uid)
-        if not validate_user(self.request, uid):
-            return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
+        try:
+            uid = WishList.get(id=self.kwargs.get("pk")).user.id
+            if not validate_user(self.request, uid):
+                return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
+        
+        except Exception as e:
+            print(e)
+            return Response(status=400, data = {"error": "Bad request", "detail": "No existe la wishlist a eliminar"})
 
         return super().delete(request, *args, **kwargs)
 

@@ -22,5 +22,5 @@ class WishListSerializer(serializers.ModelSerializer):
 
 
 class WishListQuerySerializer(serializers.Serializer):
-    on_cart = serializers.IntegerField(required = False)
-    on_cart = serializers.IntegerField(required = False)
+    favorite = serializers.IntegerField(required = False)
+    cart = serializers.IntegerField(required = False)
