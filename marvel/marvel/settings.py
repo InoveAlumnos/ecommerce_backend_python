@@ -234,5 +234,5 @@ SWAGGER_SETTINGS = {
             'name': 'Authorization',
             'in': 'header',
         }
-    }
+    },
 }
