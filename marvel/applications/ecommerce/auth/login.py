@@ -96,6 +96,12 @@ class LoginClientAPIView(APIView):
                     # Devolvemos Api-Key para cliente
                     if account.groups.filter(name = ClientGroup.group.name).exists():
 
+                        # Borrar api-key viejas en caso de que existan
+                        try:
+                            APIKey.objects.filter(name = username).delete()
+                        except:
+                            pass
+
                         # Crear una apikey para el usuario.
                         _, key = APIKey.objects.create_key(name = username)
                         try:

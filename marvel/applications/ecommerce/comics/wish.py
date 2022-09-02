@@ -257,11 +257,11 @@ class DeleteWishListAPIView(DestroyAPIView):
             return Response(status=204, data = {"detail": "Wishlist eliminada correctamente"})
 
 
-class PurchaseAPIView(APIView):
+class CheckoutAPIView(APIView):
     __doc__ = f"""
-    PurchaseAPIView \n
+    CheckoutAPIView \n
 
-    Vista de API personalizada eliminar las wishlists de un usuario luego de que el mismo realice una compra \n
+    Vista de API personalizada eliminar el carrito de un usuario luego de que el mismo realice una compra \n
 
     Para usar este endpoint, es necesario enviar la api-key en el header en el campo **X-Api-Key** y el token del usuario 
     en el campo **Authorization**.\n
@@ -274,7 +274,7 @@ class PurchaseAPIView(APIView):
         uid = self.kwargs.get("uid")
         user = User.objects.get(id = uid)
 
-        return WishList.objects.filter(user=user)
+        return WishList.objects.filter(user=user).filter(cart=True)
 
     del_responses = {
         204: openapi.Response(description = "Wishlists eliminadas correctamente")

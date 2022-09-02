@@ -80,6 +80,12 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
+        # Borrar api-keys viejas en caso de que existan
+        try:
+            APIKey.objects.filter(name = self.request.user.username).delete()
+        except:
+            pass
+
         if self.request.user.is_authenticated:
             context["api_key"] = APIKey.objects.create_key(name = self.request.user.username)[1]
 
