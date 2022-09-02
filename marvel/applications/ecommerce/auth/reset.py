@@ -33,13 +33,14 @@ class ResetPasswordView(APIView):
     authentication_classes = [TokenAuthentication]
 
     @swagger_auto_schema(
+    auto_schema = None,
     tags = ["Autenticación y manejo de usuarios"],
     request_body = openapi.Schema(
             type=openapi.TYPE_OBJECT, 
             properties = {
                 'username': openapi.Schema(type=openapi.TYPE_STRING, description='username'),
-                'password': openapi.Schema(type=openapi.TYPE_STRING, description='old_password'),
-                'password': openapi.Schema(type=openapi.TYPE_STRING, description='new_password'),
+                'old_password': openapi.Schema(type=openapi.TYPE_STRING, description='old_password'),
+                'new_password': openapi.Schema(type=openapi.TYPE_STRING, description='new_password'),
             }
     ),
     responses = {
@@ -104,6 +105,8 @@ class ResetPasswordView(APIView):
 
                 user.set_password(request.data.get("new_password"))
                 user.save()
+
+                print("Contraseña actualizada")
 
                 return Response(status = 200, data = {"success": f"Se actualizó la contraseña de {user.username} satisfactoriamente"})
             

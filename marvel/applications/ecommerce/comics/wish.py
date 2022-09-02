@@ -174,7 +174,9 @@ class PostWishListAPIView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         # Validar que el username coincide con el token enviado
-        if not validate_user(self.request, request.user):
+        uid = self.request.data.get("user")
+        print("Validando", uid)
+        if not validate_user(self.request, uid):
             return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
 
         return super().post(request, *args, **kwargs)
@@ -202,7 +204,9 @@ class UpdateWishListAPIView(UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         # Validar que el username coincide con el token enviado
-        if not validate_user(self.request, request.user):
+        uid = self.request.data.get("user")
+        print("Validando", uid)
+        if not validate_user(self.request, uid):
             return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
 
         return super().patch(request, *args, **kwargs)
@@ -232,7 +236,9 @@ class DeleteWishListAPIView(DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         # Validar que el username coincide con el token enviado
-        if not validate_user(self.request, request.user):
+        uid = self.request.data.get("user")
+        print("Validando", uid)
+        if not validate_user(self.request, uid):
             return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
 
         return super().delete(request, *args, **kwargs)
