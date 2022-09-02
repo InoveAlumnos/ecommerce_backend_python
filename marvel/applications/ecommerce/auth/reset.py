@@ -33,7 +33,6 @@ class ResetPasswordView(APIView):
     authentication_classes = [TokenAuthentication]
 
     @swagger_auto_schema(
-    auto_schema = None,
     tags = ["Autenticación y manejo de usuarios"],
     request_body = openapi.Schema(
             type=openapi.TYPE_OBJECT, 
