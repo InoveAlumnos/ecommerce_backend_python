@@ -237,7 +237,7 @@ class DeleteWishListAPIView(DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         # Validar que el username coincide con el token enviado
         try:
-            uid = WishList.get(id=self.kwargs.get("pk")).user.id
+            uid = WishList.objects.get(id=self.kwargs.get("pk")).user.id
             if not validate_user(self.request, uid):
                 return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
         
