@@ -59,46 +59,8 @@
 
     </header>
 
-    <div class="context" style="z-index: 100;">
-        
-        <h1>¡Marvel Backend!</h1>
-        {% if user.is_authenticated %}
-        <div class="api-key">
-                <h2> Tu Api-Key 👉 </h2>
-                
-                <div class="copy-box">
-                    <blockquote id="myInput"> {{ api_key }} </blockquote>
-                    
-                    <button class="copy-button" id="boton">
-                        <div id="copy-logo-container">
-                            <div id="box1" class="boxesss">
-                              <div id="box2" class="boxesss"></div>  
-                            </div></div>
-                        Copy
-                    </button>
-                </div>
-            </div>
-        {% else %}
-            <div class="api-key">
-                <h2> ¡Obtené tu Api-Key para poder empezar! </h2>
-            </div>
-        {% endif %}
-
-
-        <script>
-            function copyFunction() {
-                const copyText = document.getElementById("myInput").textContent;
-                const textArea = document.createElement('textarea');
-                textArea.textContent = copyText;
-                document.body.append(textArea);
-                textArea.select();
-                document.execCommand("copy");
-                boton.innerText = "Text copied";
-                textArea.remove();
-            }
-            document.getElementById('boton').addEventListener('click', copyFunction);
-        </script>
-    </div>
+    {% block welcome %}
+    {% endblock welcome %}
 
     <div class="area">
         <ul class="circles">
@@ -125,7 +87,7 @@
         </ul>
     </div>
 
-    <div style="position:absolute;z-index:100;width:100%;height:auto;top:50%;">
+    <div style="position:absolute;z-index:1000;width:100%;height:auto;top:50%;">
         {% block content %}{% endblock %}
     </div>
 
