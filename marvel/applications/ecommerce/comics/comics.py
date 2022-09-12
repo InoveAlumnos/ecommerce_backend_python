@@ -4,7 +4,6 @@
 APIs genéricas para realizar un CRUD a la base de datos - Tabla Comic
 '''
 
-import re
 from applications.ecommerce.models import Comic
 from applications.ecommerce.comics.serializers import *
 from rest_framework.permissions import IsAdminUser
@@ -110,7 +109,7 @@ class PostComicAPIView(CreateAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
-    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses) 
+    @swagger_auto_schema(auto_schema = None, tags = ["Administrador"], responses = comic_responses) 
 
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
@@ -135,12 +134,12 @@ class ListCreateComicAPIView(ListCreateAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
-    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses)
+    @swagger_auto_schema(auto_schema = None, tags = ["Administrador"], responses = comic_responses)
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags = ["Administrador"])
+    @swagger_auto_schema(auto_schema = None, tags = ["Administrador"])
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
@@ -158,15 +157,15 @@ class RetrieveUpdateComicAPIView(RetrieveUpdateAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
     
-    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses)
+    @swagger_auto_schema(auto_schema = None, tags = ["Administrador"], responses = comic_responses)
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses)
+    @swagger_auto_schema(auto_schema = None, tags = ["Administrador"], responses = comic_responses)
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses)
+    @swagger_auto_schema(auto_schema = None, tags = ["Administrador"], responses = comic_responses)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -183,7 +182,7 @@ class DestroyComicAPIView(DestroyAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
-    @swagger_auto_schema(tags = ["Administrador"], responses = comic_responses)
+    @swagger_auto_schema(auto_schema = None, tags = ["Administrador"], responses = comic_responses)
 
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)

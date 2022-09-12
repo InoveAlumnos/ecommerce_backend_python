@@ -2,13 +2,15 @@
 
 body {
   font-family: 'Exo', sans-serif;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 
 .context {
   width: 100%;
   position: absolute;
-  top: 50vh;
+  top: 20%;
 
 }
 

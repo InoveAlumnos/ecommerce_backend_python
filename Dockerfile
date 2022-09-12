@@ -13,15 +13,15 @@ RUN pip install -r requirements.txt
 
 RUN mkdir /opt/backend/marvel/logs
 
-# Environment variables
+# Environment variables for local development
 ENV POSTGRES_DB=inove
 ENV POSTGRES_USER=admin
 ENV POSTGRES_PASSWORD=ics2022ma-
 ENV POSTGRES_HOST=db
+ENV SECRET_KEY=django-insecure-x_^aet@$di37)k$5vb(kino$6w=px!&@-q4va4so^2c9s@)k8*
 
 # Dejamos DEBUG=True para hacer los retoques antes de pasarlo a False para producción.
 ENV DEBUG=True
-ENV SECRET_KEY=django-insecure-x_^aet@$di37)k$5vb(kino$6w=px!&@-q4va4so^2c9s@)k8*
 
 RUN python marvel/manage.py collectstatic --noinput
 

@@ -3,4 +3,108 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<style>
+    * {
+        color: white;
+        padding: 2px;
+    }
+
+    pre {
+    background: #272829;
+    color: #fff;
+    border-radius: 2px;  
+    }
+
+    .keys {
+        color: #87d2f5;
+    }
+    .values {
+        color: #e08e5e;
+    }
+
+    h1, p {
+    font-family: "helvetica", sans-serif;
+    }
+
+</style>
+
+<h1>¿Cómo obtengo mi Api-Key?</h1>
+
+<br/>
+
+<h2> 1. Registrate </h2>
+
+<h4> Opcion a: Hacerlo vía Página Web</h4>
+<p> 
+    Para registrarse tenés que ir a la <a href="https://inove-marvel-backend.herokuapp.com/ecommerce/signup/" style="all:unset;color:yellow;cursor:pointer">página de registro</a> y crear tu usuario.
+</p>
+
+<br/>
+
+<h4> Opcion b: Hacerlo vía Request</h4>
+<p>
+    Para registrarse tenés que enviar un request de tipo <strong style="color:yellow">POST</strong> a <strong style="color:yellow">https://inove-marvel-backend.herokuapp.com/ecommerce/clients/signup</strong> y crear tu usuario, para ello, tu request debe ser de la siguiente forma
+</p>
+<br/>
+<strong>Headers</strong>
+<pre>
+    <code>
+        {
+            <span class="keys">"Content-Type"</span>: <span class="values">"application/json"</span>
+        }
+    </code>
+</pre>
+<br/>
+
+<strong>Body</strong>
+<pre>
+    <code>
+        {
+            <span class="keys">"first_name"</span>: <span class="values">"tu nombre"</span>,
+            <span class="keys">"last_name"</span>: <span class="values">"tu apellido"</span>,
+            <span class="keys">"email"</span>: <span class="values">"tu email"</span>,
+            <span class="keys">"username"</span>: <span class="values">"acá elegís tu username"</span>,
+            <span class="keys">"password"</span>: <span class="values">"acá elegís tu password"</span>
+        }
+    </code>
+</pre>
+<br/>
+
+<br/><br/>
+
+<h2> 2. Iniciar Sesión </h2>
+<h4> Opción a: Hacerlo vía Página Web</h4>
+<p> 
+    Para iniciar sesión tenés que ir a la <a href="https://inove-marvel-backend.herokuapp.com/ecommerce/login/" style="all:unset;color:yellow;cursor:pointer">página de inicio de sesión</a> e indicar tus credenciales.
+</p>
+
+<br/>
+
+<h4> Opción b: Hacerlo vía Request</h4>
+<p>
+    Para iniciar sesión tenés que enviar un request de tipo <strong style="color:yellow">POST</strong> a <strong style="color:yellow">https://inove-marvel-backend.herokuapp.com/ecommerce/clients/login</strong> indicando tus credenciales. para ello, tu request debe ser de la siguiente forma
+</p>
+<br/>
+<strong>Headers</strong>
+<pre>
+    <code>
+        {
+            <span class="keys">"Content-Type"</span>: <span class="values">"application/json"</span>
+        }
+    </code>
+</pre>
+<br/>
+
+<strong>Body</strong>
+<pre>
+    <code>
+        {
+            <span class="keys">"username"</span>: <span class="values">"tu nombre de usuario"</span>,
+            <span class="keys">"password"</span>: <span class="values">"tu contraseña"</span>
+        }
+    </code>
+</pre>
+<br/>
+
+<br/>
 {% endblock %}

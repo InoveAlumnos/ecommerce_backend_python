@@ -38,4 +38,6 @@ urlpatterns = [
     # NOTE: Site pages
     path('', IndexView.as_view(), name='index'),  # Index view
     
+    path('tutorial/', TutorialView.as_view(), name='tutorial'),  # Index view
+    
 ]

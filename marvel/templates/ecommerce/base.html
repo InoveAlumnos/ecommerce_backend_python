@@ -17,6 +17,11 @@
     <link rel="icon" href="{% static 'ecommerce/img/captain-america.png' %}">
     <title> {% block title %} Marvel Backend {% endblock %} </title>
 
+    <style>
+        body {
+            background-color: black;
+        }
+    </style>
 </head>
 
 <body>
@@ -55,8 +60,8 @@
     </header>
 
     <div class="context" style="z-index: 100;">
+        
         <h1>¡Marvel Backend!</h1>
-
         {% if user.is_authenticated %}
         <div class="api-key">
                 <h2> Tu Api-Key 👉 </h2>
@@ -72,6 +77,10 @@
                         Copy
                     </button>
                 </div>
+            </div>
+        {% else %}
+            <div class="api-key">
+                <h2> ¡Obtené tu Api-Key para poder empezar! </h2>
             </div>
         {% endif %}
 

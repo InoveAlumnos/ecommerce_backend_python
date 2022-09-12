@@ -88,7 +88,7 @@ class GetWishListAPIView(ListAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
-    @swagger_auto_schema(tags = ["Administrador"], responses = wish_responses)
+    @swagger_auto_schema(auto_schema = None,tags = ["Administrador"], responses = wish_responses)
 
     def get(self, requests, *args, **kwargs):
         return super().get(requests, *args, **kwargs)
@@ -299,3 +299,4 @@ class CheckoutAPIView(APIView):
             wish.delete()
 
         return Response(status = 200, data = {"detail": "Wishlist eliminadas"})
+    

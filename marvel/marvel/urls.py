@@ -24,13 +24,13 @@ from drf_yasg.views import get_schema_view
 # Docs description - Swagger - OpenAPI
 description = f""""
 <img src="https://lh3.googleusercontent.com/pw/AM-JKLWLct73ne_PgqQ146YMYjUgbswqg703xPZPnVImkFYwGbao5YksFGJFOlcoCJLfqIJ9_LRwFAwP9qinoEvsLx92NTOfAn54SgMLTgMvtii0r_rjneGjR53bx08OCncv4mRH4gNnpmEUuKofj59L9dAv=w1257-h103-no?authuser=0">
-<h2> Documentación general de APIs de la aplicación ecommerce</h2>
+<h2> Documentación de APIs de la aplicación ecommerce</h2>
 <h4> Para utilizar los endpoints que requieren de autenticación, clickear sobre el botón **Authorize**, e ingresar la API Key y/o el Token de usuario, recordar que tienen este formato: </h4>
 ```
 {json.dumps({'X-Api-Key': '<API_KEY>', 'Authorization': 'Token <TOKEN>'}, indent=4)}
 ```
 <br>
-<h5> Lo que ustedes tienen que hacer es colocar en el campo **Value** de **X-Api-Key** el valor de su apikey (<API_KEY>) y en el campo **Value** de **Authorization** el valor de su token de usuario, usando el prefijo "Token" (Token <TOKEN\>).
+<h5> Lo que ustedes tienen que hacer es colocar en el campo **Value** de **X-Api-Key** el valor de su Api-Key (<API_KEY>) y en el campo **Value** de **Authorization** el valor de su token de usuario, usando el prefijo "Token" (Token <TOKEN\>).
 </h5>
 <br>
 """
@@ -46,7 +46,8 @@ schema_view = get_schema_view(
     public=True,
     permission_classes= [],
     authentication_classes= [],
-    url = "https://inove-marvel-backend.herokuapp.com/"
+    # url = "https://inove-marvel-backend.herokuapp.com/"
+    url = "http://localhost:8000"
 )
 
 urlpatterns = [

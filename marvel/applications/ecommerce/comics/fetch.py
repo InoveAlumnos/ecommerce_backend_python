@@ -46,7 +46,7 @@ class FetchDatabaseAPIView(APIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
-    @swagger_auto_schema(tags = ["Administrador"])
+    @swagger_auto_schema(auto_schema = None, tags = ["Administrador"])
 
     def post(self, request, *args, **kwargs):
         # Eliminar todos los comics anteriores

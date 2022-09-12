@@ -62,6 +62,13 @@ def register(request):
             # Redirigin a página de inicio de sesión
             return redirect('/ecommerce/login')
 
+        else:
+            errors = ""
+            for e in form.errors.keys():
+                errors += f"{form.errors[e][0]}\n"
+
+            return render(request, 'ecommerce/signup.html', {'form': form, 'errors': errors})
+
     else:
 
         # Crear un objeto de tipo formulario y enviarlo al contexto de renderización
@@ -90,3 +97,11 @@ class IndexView(TemplateView):
             context["api_key"] = APIKey.objects.create_key(name = self.request.user.username)[1]
 
         return context
+
+
+class TutorialView(TemplateView):
+    '''
+    Página de tutorial.
+    '''
+
+    template_name = 'ecommerce/tutorial.html'

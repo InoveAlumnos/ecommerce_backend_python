@@ -15,7 +15,7 @@ from drf_yasg import openapi
 
 class SignUpClientAPIView(APIView):
     __doc__ = """
-    SignUpUserAPIView \n
+    SignUpClientAPIView \n
 
     Vista de API personalizada para recibir peticiones de tipo POST para Registro de Clientes. \n
     """
@@ -93,6 +93,13 @@ class SignUpClientAPIView(APIView):
                 user_data.update(serializer.data)
                 return Response(status = 200, data = user_data)
             
+            desc = ""
+            for e in serializer.errors.keys():
+                desc += f"{e}: {serializer.errors.get(e)[0]} \n"
+            
+            if desc:
+                return Response(status = 400, data = {"error": "Bad Request", "detail": desc})
+
             return Response(status = 400, data = {"error": "Bad Request", "detail": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
         except Exception as e:
@@ -197,6 +204,13 @@ class SignUpUserAPIView(APIView):
                 user_data = {"user_id": user.id}
                 user_data.update(serializer.data)
                 return Response(status = 200, data = user_data)
+
+            desc = ""
+            for e in serializer.errors.keys():
+                desc += f"{e}: {serializer.errors.get(e)[0]} \n"
+            
+            if desc:
+                return Response(status = 400, data = {"error": "Bad Request", "detail": desc})
 
             return Response(status = 400, data = {"error": "Bad Request", "detail": f"Los siguientes campos son obligatorios: {list(serializer.errors.keys())}"})
 
