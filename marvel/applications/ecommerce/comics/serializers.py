@@ -21,6 +21,13 @@ class WishListSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
+class GetWishListSerializer(serializers.ModelSerializer):
+    comic = ComicSerializer()
+
+    class Meta:
+        model = WishList
+        fields = ('__all__')
+
 class WishListQuerySerializer(serializers.Serializer):
     favorite = serializers.IntegerField(required = False)
     cart = serializers.IntegerField(required = False)

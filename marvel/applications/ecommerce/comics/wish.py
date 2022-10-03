@@ -84,7 +84,7 @@ class GetWishListAPIView(ListAPIView):
     **Importante: el método post sólo puede ser utilizado por administradores de la aplicación.** \n
     """
     queryset = WishList.objects.all()
-    serializer_class = WishListSerializer
+    serializer_class = GetWishListSerializer
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication]
 
