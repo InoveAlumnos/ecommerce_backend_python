@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from applications.ecommerce.models import Profile
-from applications.ecommerce.permissions import IsClient
 from applications.ecommerce.auth.serializers import ProfileDataSerializer
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
@@ -14,10 +13,9 @@ from django.db.utils import IntegrityError
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.generics import ListAPIView, GenericAPIView
 
 
-class GetProfileDataByUserId(ListAPIView):
+class GetProfileDataByUserId(APIView):
     __doc__ = """
     GetProfileDataByUserId \n
     
@@ -28,57 +26,26 @@ class GetProfileDataByUserId(ListAPIView):
     authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
-        uid = self.kwargs.get("uid")
-        user = User.objects.get(id = uid)
-        profile = Profile.objects.get(user=user)
-        return profile
+        return Profile.objects.filter(user = self.kwargs.get("uid"))
 
     @swagger_auto_schema(tags = ["Autenticación y manejo de usuarios"])
 
     def get(self, request, *args, **kwargs):
         uid = self.kwargs.get("uid")
+
         try:
             user = User.objects.get(id = uid)
         except Exception as e:
-            print(e)
             return Response(status = 400, data = {"error": "Bad request", "detail": f"No se encontró el usuario {uid}"})
 
         # Validar que el user id coincide con el token enviado
         if not Token.objects.get(key = self.request.headers.get("Authorization").split(" ")[1]).user == user:
             return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
         
-        return super().get(request, *args, **kwargs)
-
-
-class GetProfileDataByUsername(ListAPIView):
-    __doc__ = """
-    GetProfileDataByUsername \n
-    
-    Vista de API personalizada para recibir peticiones de tipo GET y obtener el perfil de un usuario, dado su id \n
-    """
-    permission_classes = [HasAPIKey and IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
-
-    def get_queryset(self):
-        username = self.kwargs.get("username")
-        user = User.objects.get(id = username)
-        profile = Profile.objects.get(user=user)
-        return profile
-
-    @swagger_auto_schema(tags = ["Autenticación y manejo de usuarios"])
-    def get(self, request, *args, **kwargs):
-        username = self.kwargs.get("username")
-        try:
-            user = User.objects.get(username = username)
-        except Exception as e:
-            print(e)
-            return Response(status = 400, data = {"error": "Bad request", "detail": f"No se encontró el usuario {username}"})
-
-        # Validar que el user id coincide con el token enviado
-        if not Token.objects.get(key = self.request.headers.get("Authorization").split(" ")[1]).user == user:
-            return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
-        
-        return super().get(request, *args, **kwargs)
+        profile = self.get_queryset().first()
+        return Response(status = 200, data = {
+            'phone': profile.phone, 'address': profile.address, 'province_state': profile.province_state, 
+            'country': profile.country, 'postal_code': profile.postal_code})
 
 
 class UpdateProfileAPIView(APIView):
@@ -104,7 +71,6 @@ class UpdateProfileAPIView(APIView):
     request_body = openapi.Schema(
             type=openapi.TYPE_OBJECT, 
             properties = {
-                'username': openapi.Schema(type=openapi.TYPE_STRING, description='username'),
                 'phone': openapi.Schema(type=openapi.TYPE_STRING, description='phone'),
                 'address': openapi.Schema(type=openapi.TYPE_STRING, description='address'),
                 'province_state': openapi.Schema(type=openapi.TYPE_STRING, description='province_state'),
@@ -167,7 +133,8 @@ class UpdateProfileAPIView(APIView):
 
     def patch(self, request, *args, **kwargs):
         try:
-            consumer = User.objects.get(username = request.data.get("username"))
+            # Usuario del perfil que se está consultando
+            consumer = User.objects.get(id = self.kwargs.get("uid"))
 
             # Validar que el username coincide con el token enviado            
             if not Token.objects.get(key = request.headers.get("Authorization").split(" ")[1]).user == consumer:
@@ -178,7 +145,8 @@ class UpdateProfileAPIView(APIView):
             return Response(status=500, data = {"error": "Internal server error", "detail": e})
 
         try:
-            profile = Profile.objects.get(user = consumer)
+            # Obtener el perfil que se desea actualizar
+            profile = Profile.objects.get(user = consumer.id)
         
         except IntegrityError:
             print("No se encontró el perfil del usuario")

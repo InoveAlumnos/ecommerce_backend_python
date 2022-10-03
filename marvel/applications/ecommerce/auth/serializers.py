@@ -44,9 +44,9 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class ProfileDataSerializer(serializers.Serializer):
 
-    username = serializers.CharField()
+    user = serializers.PrimaryKeyRelatedField(write_only = True, queryset = User.objects.all())
 
     class Meta:
         model = Profile
-        fields = ("username",)
+        fields = ("__all__")
         
