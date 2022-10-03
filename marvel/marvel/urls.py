@@ -47,7 +47,7 @@ schema_view = get_schema_view(
     permission_classes= [],
     authentication_classes= [],
     # url = "https://inove-marvel-backend.herokuapp.com/"
-    url = "http://localhost:8000"
+    url = "https://inove-marvel-backend.herokuapp.com"
 )
 
 urlpatterns = [

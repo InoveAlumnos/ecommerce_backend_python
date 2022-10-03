@@ -38,8 +38,7 @@ SECRET_KEY = 'django-insecure-q6!*-w(7gh2+a#qu=#4vl6_p4(e%=pm03f!8+re_!wbo-wu9w8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost',
-                 'inove-marvel-backend.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
