@@ -4,6 +4,7 @@
 APIs genéricas para realizar un CRUD a la base de datos - Tabla WishList
 """
 
+from rest_framework.parsers import JSONParser
 from applications.ecommerce.models import WishList
 from applications.ecommerce.comics.serializers import *
 from django.contrib.auth.models import User
@@ -174,6 +175,7 @@ class PostWishListAPIView(CreateAPIView):
     a dueño de la wishlist en el campo **Authorization**.\n
     '''
     queryset = WishList.objects.all()
+    parser_classes = [JSONParser]
     serializer_class = WishListSerializer
     permission_classes = [HasAPIKey and IsAuthenticated]
     authentication_classes = [TokenAuthentication]
@@ -181,9 +183,14 @@ class PostWishListAPIView(CreateAPIView):
     @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses)
 
     def post(self, request, *args, **kwargs):
+        try:
+            JSONParser().parse(request)
+        except:
+            return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
+
         # Validar que el username coincide con el token enviado
         uid = self.request.data.get("user")
-        print("Validando", uid)
+
         if not validate_user(self.request, uid):
             return Response(status=401, data = {"error": "Unauthorized", "detail": "Credenciales inválidas - Token inválido"})
 
@@ -201,6 +208,7 @@ class UpdateWishListAPIView(UpdateAPIView):
     """
 
     queryset = WishList.objects.all()
+    parser_classes = [JSONParser]
     serializer_class = WishListSerializer
     permission_classes = [HasAPIKey and IsAuthenticated]
     authentication_classes = [TokenAuthentication]
@@ -211,6 +219,11 @@ class UpdateWishListAPIView(UpdateAPIView):
     @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses)
 
     def patch(self, request, *args, **kwargs):
+        try:
+            JSONParser().parse(request)
+        except:
+            return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
+        
         # Validar que el username coincide con el token enviado
         uid = self.request.data.get("user")
         print("Validando", uid)

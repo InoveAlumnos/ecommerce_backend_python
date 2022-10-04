@@ -33,10 +33,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-q6!*-w(7gh2+a#qu=#4vl6_p4(e%=pm03f!8+re_!wbo-wu9w8'
+SECRET_KEY = get_env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if get_env('DEBUG') == 'True' else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -90,10 +90,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_HEADERS = ['*', 'x-api-key', 'X-Api-Key', 'Authorization', 'Content-Type', 'Access-Control-Allow-Origin']
+
+CORS_EXPOSE_HEADERS = ['*', 'x-api-key', 'X-Api-Key', 'Authorization', 'Content-Type', 'Access-Control-Allow-Origin']
 
 ROOT_URLCONF = 'marvel.urls'
 

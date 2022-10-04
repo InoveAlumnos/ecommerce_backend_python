@@ -133,6 +133,11 @@ class UpdateProfileAPIView(APIView):
 
     def patch(self, request, *args, **kwargs):
         try:
+            JSONParser().parse(request)
+        except:
+            return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
+        
+        try:
             # Usuario del perfil que se está consultando
             consumer = User.objects.get(id = self.kwargs.get("uid"))
 

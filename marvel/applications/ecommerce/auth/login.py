@@ -83,6 +83,12 @@ class LoginClientAPIView(APIView):
     def post(self, request, *args, **kwargs):
 
         try:
+            JSONParser().parse(request)
+
+        except:
+            return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
+
+        try:
             serializer = self.serializer_class(data = request.data)
 
             if serializer.is_valid():
@@ -205,7 +211,11 @@ class LoginUserAPIView(APIView):
 
 
     def post(self, request, *args, **kwargs):
-            
+        try:
+            JSONParser().parse(request)
+        except:
+            return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
+        
         try:
             serializer = self.serializer_class(data = request.data)
 
