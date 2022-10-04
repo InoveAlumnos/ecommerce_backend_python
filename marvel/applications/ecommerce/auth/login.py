@@ -42,7 +42,7 @@ class LoginClientAPIView(APIView):
             examples = {
                 "application/json": {
                     "username": "username",
-                    "api-key": "hlvQaIRo.1lrb7dV69yjb07vhRLsE7wrCHNOmwsav",
+                    "apiKey": "hlvQaIRo.1lrb7dV69yjb07vhRLsE7wrCHNOmwsav",
                 }
             }
         ),
@@ -115,7 +115,7 @@ class LoginClientAPIView(APIView):
                         except Exception as e:
                             return Response(status = 500, data = {'error': 'Internal Server Error', 'detail': 'Ocurrió un error en el servidor'})
 
-                        return Response(status = 200, data = {'username': username, 'uid': user.id, 'api-key': key})
+                        return Response(status = 200, data = {'username': username, 'uid': user.id, 'apiKey': key})
                     
                     else:
                         return Response(status = 403, data = {"error": "Unauthorized", "detail": "Tu usuario no tiene los permisos para realizar esta acción"})
@@ -162,7 +162,8 @@ class LoginUserAPIView(APIView):
             examples = {
                 "application/json": {
                     "username": "username",
-                    "api-key": "hlvQaIRo.1lrb7dV69yjb07vhRLsE7wrCHNOmwsav",
+                    "uid": 1,
+                    "token": "hlvQaIRo.1lrb7dV69yjb07vhRLsE7wrCHNOmwsav",
                 }
             }
         ),
