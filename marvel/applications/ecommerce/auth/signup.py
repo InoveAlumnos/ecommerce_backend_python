@@ -78,8 +78,9 @@ class SignUpClientAPIView(APIView):
 
             if serializer.is_valid():
                 try:
-                    serializer.data["username"] = serializer.data["username"].lower()
                     user = serializer.save()
+                    user.username = user.username.lower()
+                    user.save()
                     # Agregar al usuario al grupo "client"
                     ClientGroup().agregar_usuario(user)
 
@@ -185,8 +186,9 @@ class SignUpUserAPIView(APIView):
 
             if serializer.is_valid():
                 try:
-                    serializer.data["username"] = serializer.data["username"].lower()
                     user = serializer.save()
+                    user.usernmae = user.username.lower()
+                    user.save()
                     ConsumerGroup().agregar_usuario(user)
 
                 except IntegrityError as ie:
