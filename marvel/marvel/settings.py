@@ -99,6 +99,8 @@ CORS_ALLOW_HEADERS = ['*', 'x-api-key', 'X-Api-Key', 'Authorization', 'Content-T
 
 CORS_EXPOSE_HEADERS = ['*', 'x-api-key', 'X-Api-Key', 'Authorization', 'Content-Type', 'Access-Control-Allow-Origin']
 
+CORS_ALLOW_HOSTS = ['*']
+
 ROOT_URLCONF = 'marvel.urls'
 
 TEMPLATES = [

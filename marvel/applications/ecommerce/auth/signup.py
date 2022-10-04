@@ -5,13 +5,11 @@ from applications.ecommerce.groups import ClientGroup, ConsumerGroup
 from applications.ecommerce.auth.serializers import RegisterSerializer
 from django.db.utils import IntegrityError
 from rest_framework_api_key.permissions import HasAPIKey
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-        
 
 class SignUpClientAPIView(APIView):
     __doc__ = """
@@ -74,16 +72,13 @@ class SignUpClientAPIView(APIView):
     )
     
     def post(self, request, *args, **kwargs):
-        try:
-            JSONParser().parse(request)
-        except:
-            return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
-            
+
         try:
             serializer = self.serializer_class(data = request.data)
 
             if serializer.is_valid():
                 try:
+                    serializer.data["username"] = serializer.data["username"].lower()
                     user = serializer.save()
                     # Agregar al usuario al grupo "client"
                     ClientGroup().agregar_usuario(user)
@@ -184,16 +179,13 @@ class SignUpUserAPIView(APIView):
     )
 
     def post(self, request, *args, **kwargs):
-        try:
-            JSONParser().parse(request)
-        except:
-            return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
         
         try:
             serializer = self.serializer_class(data = request.data)
 
             if serializer.is_valid():
                 try:
+                    serializer.data["username"] = serializer.data["username"].lower()
                     user = serializer.save()
                     ConsumerGroup().agregar_usuario(user)
 

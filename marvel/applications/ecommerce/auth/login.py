@@ -83,17 +83,11 @@ class LoginClientAPIView(APIView):
     def post(self, request, *args, **kwargs):
 
         try:
-            JSONParser().parse(request)
-
-        except:
-            return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
-
-        try:
             serializer = self.serializer_class(data = request.data)
 
             if serializer.is_valid():
 
-                username = request.data.get('username')
+                username = request.data.get('username').lower()
                 password = request.data.get('password')
                 account = authenticate(username = username, password = password)
 
@@ -213,16 +207,11 @@ class LoginUserAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            JSONParser().parse(request)
-        except:
-            return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
-        
-        try:
             serializer = self.serializer_class(data = request.data)
 
             if serializer.is_valid():
 
-                username = request.data.get('username')
+                username = request.data.get('username').lower()
                 password = request.data.get('password')
                 account = authenticate(username = username, password = password)
                 # Si el usuario existe y sus credenciales son validas, intentamos obtener el token

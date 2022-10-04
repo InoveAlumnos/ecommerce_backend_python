@@ -183,10 +183,6 @@ class PostWishListAPIView(CreateAPIView):
     @swagger_auto_schema(tags = ["Comics y Wishlists"], responses = wish_responses)
 
     def post(self, request, *args, **kwargs):
-        try:
-            JSONParser().parse(request)
-        except:
-            return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
 
         # Validar que el username coincide con el token enviado
         uid = self.request.data.get("user")
