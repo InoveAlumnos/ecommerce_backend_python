@@ -78,7 +78,7 @@ class GetComicAPIView(ListAPIView):
         limit = self.request.GET.get("limit", 20)
         offset = self.request.GET.get("offset", 0)
         if limit is not None:
-            return Comic.objects.all()[int(offset):int(limit)]
+            return Comic.objects.all()[int(offset):int(offset) + int(limit)]
         return Comic.objects.all()
 
     limit = openapi.Parameter('limit', openapi.IN_QUERY,
