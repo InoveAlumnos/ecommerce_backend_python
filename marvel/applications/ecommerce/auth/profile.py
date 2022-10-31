@@ -133,10 +133,10 @@ class UpdateProfileAPIView(APIView):
 
     def patch(self, request, *args, **kwargs):
         try:
-            JSONParser().parse(request)
+            data = JSONParser().parse(request)
         except:
             return Response(status = 400, data = {"error": "Bad Request", "detail": "El payload no es un JSON válido"})
-        
+
         try:
             # Usuario del perfil que se está consultando
             consumer = User.objects.get(id = self.kwargs.get("uid"))
@@ -155,7 +155,7 @@ class UpdateProfileAPIView(APIView):
         
         except IntegrityError:
             print("No se encontró el perfil del usuario")
-            return Response(status = 400, data = {"error": f"El nombre de usuario {request.data['username']} es incorrecto"})
+            return Response(status = 400, data = {"error": f"El nombre de usuario {data.get('username')} es incorrecto"})
 
         except Exception as e:
             print(e)
@@ -163,7 +163,7 @@ class UpdateProfileAPIView(APIView):
 
         try:
             # Actualizar perfil
-            [setattr(profile, key, value) for key, value in request.data.items() if key in profile.__dict__]
+            [setattr(profile, key, value) for key, value in data.items() if key in profile.__dict__]
             profile.save()
         
         except Exception as e:
